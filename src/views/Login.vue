@@ -1,55 +1,91 @@
 <script>
+  import { ref } from 'vue'
+  import { useMessage } from 'naive-ui'
 
+  export default {
+    setup () {
+      const formRef = ref(null)
+      const message = useMessage()
+      return {
+        formRef,
+        size: 'large',
+        model: ref({
+          email: '',
+          password: ''
+        }),
+        rules: {
+          email: {
+            required: true,
+            message: 'Please input your email',
+            trigger: ['input', 'blur']
+          },
+          password: {
+            required: true,
+            message: 'Please input your password',
+            trigger: ['input', 'blur']
+          }
+        },
+        handleValidateClick (event) {
+          event.preventDefault()
+          formRef.value?.validate((errors) => {
+            if (!errors) {
+              message.success('Campi Validi')
+            } else {
+              message.error('Campi Invalidi')
+            }
+          })
+        }
+      }
+    }
+  }
 </script>
 
 <template>
-    <n-config-provider :theme-overrides="theme">
-    <!--inserire nav bar-->
-    <!--non vi è un tag form ma più campi input messi in un div, manca gestore input e bottone per conferma, 
-        è presente uno span con id = errorMsg da poter usare assieme a js in caso di errori di login,
-        ogni tag input non registra le info inserite-->
+  <n-space justify="center" align="center" style="gap: 50px; padding-top: 12vh;">
+      <img src="../images/Login.png"/>
 
-    <!--image e form per login-->
-    <n-space justify="space-around" align="center" style="padding-top: 12vh; padding-left: 16vw; padding-right: 16vw;">
-        <img src="../images/Login.png"/>
-
-        <n-card bordered style="width: 27vw;">
+      <n-form
+        ref="formRef"
+        :model="model"
+        :rules="rules"
+        :size="size"
+      >
+        <n-card bordered style="width: 25vw;">
+          <n-space vertical>
             <span class="ag-t-h1">Login</span>
-
-            <!--la parte di login vera e propria-->
-            <n-space vertical style="align-content: end; padding-bottom: 24px; padding-top: 32px;">
-                <n-space vertical>
-                    <span class="ag-t-small-bold">Email</span>
-                    <n-input size="large" round placeholder="Email"/><!--il type email non esiste in naive, bisogna creare un validatore-->
-                </n-space>
-
-                <n-space vertical>
-                    <span class="ag-t-small-bold">Password</span>
-                    <n-input size="large" round type="password" show-password-on="mousedown" placeholder="Password"/>
-                </n-space>
-
+            <n-space vertical>
+              <n-form-item path="email" label="Email">
+                <n-input
+                  round
+                  type="email"
+                  v-model:value="model.email"
+                />
+              </n-form-item>
+              <n-form-item path="password" label="Password">
+                <n-input
+                  round
+                  type="password"
+                  v-model:value="model.password"
+                  show-password-on="mousedown"
+                />
+              </n-form-item>
+            </n-space>
+            <n-space vertical style="gap: 20px;">
+              <n-space vertical align="stretch">
                 <a href="" class="ag-t-small" style="text-decoration: none">Password dimenticata?</a>
+                <n-button round size="large" type="primary" block @click="handleValidateClick">Accedi</n-button>
+                <span id="errorMsg" class="c-error">Fatal login error</span><!--span per l'inserimento di messaggi di errori dovuti al login-->
+              </n-space>
+              <n-space vertical align="stretch">
+                <span class="ag-t-small">Non hai ancora un account?</span>
+                <n-button round size="large" type="info" block @click="">Registrati</n-button>
+              </n-space>
             </n-space>
-
-            <!-- bottoni e link esterni-->
-            <n-space vertical style="row-gap: 56px; padding-bottom: 32px;">
-                <n-space vertical size="medium">
-                    <n-button round size="large" type="primary" block @click="">Accedi</n-button>
-                    <span id="errorMsg" class="c-error">Fatal login error</span><!--span per l'inserimento di messaggi di errori dovuti al login-->
-                </n-space>
-                    
-                <n-space vertical size="medium">
-                    <span class="ag-t-small">Non hai ancora un account?</span>
-                    <n-button round size="large" type="info" block @click="">Registrati</n-button>
-                </n-space>
-            </n-space>
+          </n-space>
         </n-card>
-    </n-space>
-
-    <!--inserire footer-->
-    </n-config-provider>
+      </n-form>
+  </n-space>
 </template>
 
 <style scoped>
-
 </style>

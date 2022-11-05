@@ -1,7 +1,7 @@
 <script>
   import { Bag } from '@vicons/ionicons5'
   import { Icon } from '@vicons/utils'
-  import {RouterLink, RouterView} from 'vue-router'
+  import { RouterView} from 'vue-router'
 
   export default {
     components: {
@@ -29,32 +29,25 @@
 </script>
 
 <template>
-
-<!--
-  <n-button round size="large" type="info" icon-placement='left'>
-      <Icon>
-        <Bag />
-      </Icon>
-      Negozio
-    </n-button>
--->
-
   <n-config-provider :theme-overrides="theme">
-    <RouterView />
-  </n-config-provider>  
+    <!-- Inserire Navbar -->
 
+    <n-message-provider>
+      <RouterView />
+    </n-message-provider>
+
+    <!-- Inserire Footer -->
+
+  </n-config-provider>  
 </template>
 
 <style>
-/*
-tutti questi stili sono disponibili in ogni pagina in quanto non scoped
-*/
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 body {
-    -ms-overflow-style: none; /* for Internet Explorer, Edge */
-    scrollbar-width: none; /* for Firefox */
+    -ms-overflow-style: none; /* for Internet Explorer */
+    scrollbar-width: none; /* for old versions of Firefox */
     overflow-y: scroll; 
 }
 
@@ -138,5 +131,4 @@ body::-webkit-scrollbar {
   text-align: center;
   color: #CF4040; 
 }
-
 </style>
