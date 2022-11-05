@@ -35,16 +35,16 @@
         <!--cards-->
         <n-grid :cols="5" :rows="3" :y-gap="30">
           <!--card1-->
-          <n-grid-item :offset="1" style="width:60vw" span="4">
+          <n-grid-item :offset="1" style="width:60vw;" span="4">
             <n-card>
               <n-layout size="large">
                 <n-layout has-sider>
-                  <n-layout-sider  width=400 style="margin-left:2vw">
+                  <n-layout-sider width=400 style="margin-left:2vw">
                     <span class="ag-t-large-bold">Cerca, trova e risparmia!</span><br/><br/>
                     <span class="ag-t-medium" style="color: #000000">Si sta avvicinando l’inizio dell’anno scolastico e la lista della spesa è lunga?
                     <br/>Entra in Skupply e risparmia cercando tra centinaia di prodotti di seconda mano.</span>
                   </n-layout-sider>
-                  <n-layout-content style="padding-left: 7vw; padding-right:2vw;">
+                  <n-layout-content align="end" style="padding-right: 2vw">
                     <img src="../images/HomeCard1.png" style="max-width:auto; max-height:auto">  
                   </n-layout-content>
                 </n-layout>
@@ -60,7 +60,7 @@
                   <n-layout-content style="margin-left:2vw">
                     <img src="../images/HomeCard2.png" style="max-width:auto; max-height:auto">  
                   </n-layout-content>
-                  <n-layout-sider width=350 style="margin-right:3vw">
+                  <n-layout-sider width=350 style="margin-right:2vw">
                     <span class="ag-t-large-bold">Guadagna da ciò che non usi più!</span><br/><br/>
                     <span class="ag-t-medium" style="color: #000000">Quante volte hai comprato del materiale per utilizzarlo un paio di volte e dimenticarlo nel cassetto?
                       <br/>È ora di dargli nuova vita e di guadagnarci qualcosina.</span>
@@ -80,7 +80,7 @@
                     <span class="ag-t-medium" style="color: #000000">Sfoglia il negozio, contatta i venditori, riempi il carrello e ricevi comodamente a casa.
                       <br/>Se qualcosa non dovesse andare per il meglio saremo lieti di occuparcene.</span>
                   </n-layout-sider>
-                  <n-layout-content style="padding-left:5vw">
+                  <n-layout-content align="end" style="padding-right: 2vw">
                     <img src="../images/HomeCard3.png" style="max-width:auto; max-height:auto">  
                   </n-layout-content>
                 </n-layout>
