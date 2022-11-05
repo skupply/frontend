@@ -109,4 +109,34 @@ body::-webkit-scrollbar {
   color: #FEFEFE;
 }
 
+.ag-t-small-bold{
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: #1D1D1D;
+}
+
+.ag-t-small{
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: #828282;
+}
+
+.c-error{
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: #CF4040; 
+}
+
 </style>
