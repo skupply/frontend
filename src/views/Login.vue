@@ -52,7 +52,7 @@
       >
         <n-card bordered style="width: 25vw;">
           <n-space vertical>
-            <span class="ag-t-h1">Login</span>
+            <span class="t-h1">Login</span>
             <n-space vertical>
               <n-form-item path="email" label="Email">
                 <n-input
@@ -72,12 +72,12 @@
             </n-space>
             <n-space vertical style="gap: 20px;">
               <n-space vertical align="stretch">
-                <a href="" class="ag-t-small" style="text-decoration: none">Password dimenticata?</a>
+                <a href="" class="t-small" style="text-decoration: none">Password dimenticata?</a>
                 <n-button round size="large" type="primary" block @click="handleValidateClick">Accedi</n-button>
                 <span id="errorMsg" class="c-error">Fatal login error</span><!--span per l'inserimento di messaggi di errori dovuti al login-->
               </n-space>
               <n-space vertical align="stretch">
-                <span class="ag-t-small">Non hai ancora un account?</span>
+                <span class="t-small">Non hai ancora un account?</span>
                 <n-button round size="large" type="info" block @click="">Registrati</n-button>
               </n-space>
             </n-space>

@@ -9,8 +9,8 @@
         </n-layout-content>
         <n-layout-content>
             <n-space vertical >
-                <span class="ag-t-h1">Uh? Sembra che la pagina non esista</span>
-                <span class="ag-t-large">Il team di Skupply si scusa per il disagio. Visita il negozio per  riprendere la tua esperienza.<br/>
+                <span class="t-h1">Uh? Sembra che la pagina non esista</span>
+                <span class="t-large">Il team di Skupply si scusa per il disagio. Visita il negozio per  riprendere la tua esperienza.<br/>
                   Se il problema persiste contattaci, saremo lieti di aiutarti!</span>
             </n-space>
         </n-layout-content>

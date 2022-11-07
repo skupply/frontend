@@ -55,7 +55,7 @@ body::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
 }
 
-.ag-t-h1{
+.t-h1{
   font-family: 'Quicksand';
   font-style: normal;
   font-weight: 700;
@@ -64,7 +64,7 @@ body::-webkit-scrollbar {
   color: #44355B;
 }
 
-.ag-t-large{
+.t-large{
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
@@ -73,7 +73,7 @@ body::-webkit-scrollbar {
   color: #1D1D1D;
 }
 
-.ag-t-large-bold{
+.t-large-bold{
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
@@ -82,7 +82,7 @@ body::-webkit-scrollbar {
   color: #1D1D1D;
 }
 
-.ag-t-h3{
+.t-h3{
   font-family: 'Quicksand';
   font-style: normal;
   font-weight: 700;
@@ -92,7 +92,7 @@ body::-webkit-scrollbar {
   color: #FEFEFE;
 }
 
-.ag-t-medium{
+.t-medium{
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
@@ -102,7 +102,7 @@ body::-webkit-scrollbar {
   color: #FEFEFE;
 }
 
-.ag-t-small-bold{
+.t-small-bold{
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
@@ -112,7 +112,7 @@ body::-webkit-scrollbar {
   color: #1D1D1D;
 }
 
-.ag-t-small{
+.t-small{
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
