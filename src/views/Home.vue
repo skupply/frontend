@@ -10,7 +10,7 @@
       <span class="t-large">Visita il nostro marketplace dove moltissimi<br/>
           studenti comprano e vendono ma soprattutto<br/>
           risparmiano su centinaia di prodotti scolastici.</span>
-      <n-button round size="large"  type="info" block>Visita il negozio</n-button>
+      <n-button round size="large" type="info">Visita il negozio</n-button>
     </n-space>
 
     <n-space justify="end" size="large">

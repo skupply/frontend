@@ -29,9 +29,9 @@
           event.preventDefault()
           formRef.value?.validate((errors) => {
             if (!errors) {
-              message.success('Campi Validi')
+              message.success('Campi validi')
             } else {
-              message.error('Campi Invalidi')
+              message.error('Campi non validi')
             }
           })
         }
@@ -41,7 +41,7 @@
 </script>
 
 <template>
-  <n-space justify="center" align="center" style="gap: 50px; padding-top: 12vh;">
+  <n-space justify="center" align="center" style="gap: 50px; padding-top: 12vh; padding-bottom: 101px;">
       <img src="../images/Login.png"/>
 
       <n-form
@@ -74,7 +74,6 @@
               <n-space vertical align="stretch">
                 <a href="" class="t-small" style="text-decoration: none">Password dimenticata?</a>
                 <n-button round size="large" type="primary" block @click="handleValidateClick">Accedi</n-button>
-                <span id="errorMsg" class="c-error">Fatal login error</span><!--span per l'inserimento di messaggi di errori dovuti al login-->
               </n-space>
               <n-space vertical align="stretch">
                 <span class="t-small">Non hai ancora un account?</span>
