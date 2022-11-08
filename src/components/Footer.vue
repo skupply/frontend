@@ -52,7 +52,7 @@ export default {
     </n-space>
 
     <!-- sezione extra-->
-    <n-space justify="center" size="medium" style="padding-top: 40px">
+    <n-space justify="center" size="medium" style="padding-top: 40px; padding-bottom: 20px;">
         <span class="t-small-bold" style="color: #828282">© 2022</span>
         <a href="" class="t-small-bold" style="color: #828282">Privacy - Termini</a>
     </n-space>
