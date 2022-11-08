@@ -1,15 +1,10 @@
 <script>
-  import { Bag } from '@vicons/ionicons5'
-  import { Icon } from '@vicons/utils'
   import { RouterView} from 'vue-router'
 
   import Footer from './components/Footer.vue'
+  import NavBar from './components/NavBar.vue'
 
   export default {
-    components: {
-      Bag,
-      Icon
-    },
     data() {
       return {
         theme: {
@@ -23,6 +18,13 @@
             infoColorHover: '#FB7258FF',
             infoColorPressed: '#C83F25FF',
             infoColorSuppl: '#FB7258FF',
+          },
+          Button : {
+            paddingRoundLarge: "10px 40px",
+            borderPrimary: "2px solid"
+          },
+          Space: {
+            gapLarge: "8px 40px"
           }
         }
       }
@@ -33,7 +35,7 @@
 <template>
   <n-config-provider :theme-overrides="theme">
     <!-- Inserire Navbar -->
-
+    <NavBar />
     <n-message-provider>
       <RouterView />
     </n-message-provider>
@@ -92,6 +94,15 @@ body::-webkit-scrollbar {
   color: #FEFEFE;
 }
 
+.t-normal-bold{
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 25px;
+  color: #44355B;
+}
+
 .t-medium{
   font-family: 'Roboto';
   font-style: normal;
@@ -131,4 +142,5 @@ body::-webkit-scrollbar {
   text-align: center;
   color: #CF4040; 
 }
+
 </style>
