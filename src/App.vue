@@ -3,6 +3,8 @@
   import { Icon } from '@vicons/utils'
   import { RouterView} from 'vue-router'
 
+  import Footer from './components/Footer.vue'
+
   export default {
     components: {
       Bag,
@@ -35,9 +37,7 @@
     <n-message-provider>
       <RouterView />
     </n-message-provider>
-
-    <!-- Inserire Footer -->
-
+    <Footer />
   </n-config-provider>  
 </template>
 
