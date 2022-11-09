@@ -14,11 +14,6 @@ const router = createRouter({
       component: Home
     },
     {
-      path: '/404',
-      name: '404',
-      component: NotFound
-    },
-    {
       path: '/500',
       name: '500',
       component: ServerError
@@ -27,6 +22,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      component: NotFound
     }
   ]
 })
