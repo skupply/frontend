@@ -18,13 +18,6 @@
             infoColorHover: '#FB7258FF',
             infoColorPressed: '#C83F25FF',
             infoColorSuppl: '#FB7258FF',
-          },
-          Button : {
-            paddingRoundLarge: "10px 40px",
-            borderPrimary: "2px solid"
-          },
-          Space: {
-            gapLarge: "8px 40px"
           }
         }
       }
@@ -34,7 +27,6 @@
 
 <template>
   <n-config-provider :theme-overrides="theme">
-    <!-- Inserire Navbar -->
     <NavBar />
     <n-message-provider>
       <RouterView />
