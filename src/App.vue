@@ -18,6 +18,21 @@
             infoColorHover: '#FB7258FF',
             infoColorPressed: '#C83F25FF',
             infoColorSuppl: '#FB7258FF',
+          },
+          Typography: {
+            headerFontSize1: "56px",
+            headerFontSize2: "48px",
+            headerFontSize3: "40px",
+            headerFontSize4: "32px",
+            headerFontSize5: "24px",
+            headerFontSize6: "20px",
+            headerMargin1: "0",
+            headerMargin2: "0",
+            headerMargin3: "0",
+            headerMargin4: "0",
+            headerMargin5: "0",
+            headerMargin6: "0",
+            textColor3Depth: "#BDBDBDFF"
           }
         }
       }
