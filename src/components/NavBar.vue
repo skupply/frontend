@@ -47,13 +47,13 @@ export default {
 
 <template>
   <n-config-provider :theme-overrides="theme">
-    <n-space justify="space-evenly" class="background" style="padding-top:21px">
+    <n-space justify="space-evenly" class="background" style="height: 64px; align-items: center;">
         <!--sezione link-->
-        <Wordmark witdh="150px" height="50px"/>
+        <Wordmark witdh="100px" height="30px"/>
       
         <n-space justify="space-between" size="large">
 
-          <a href="">
+          <a href="market">
             <n-space align="center" size="small">
               <Icon size="30" color="#1D1D1D">
                 <BagHandleOutline />
