@@ -2,11 +2,25 @@
 
 import Wordmark from './icons/Wordmark.vue'
 import { Box16Regular } from '@vicons/fluent'
+import { User } from '@vicons/carbon'
 import { BagHandleOutline, ChatbubblesOutline, HeartOutline, CartOutline } from '@vicons/ionicons5'
 import { Icon } from '@vicons/utils'
 
 export default {
-
+  data(){
+    return {
+      theme:{
+        Button: {
+            paddingRoundLarge: "10px 40px",
+            borderPrimary: "2px solid"
+          },
+          Space: {
+            gapLarge: "8px 50px"
+          }
+      },
+      isLogged : false /*controllare se è presenta una sessione*/
+    }
+  },
   components: {
     Wordmark,
     Icon,
@@ -14,51 +28,79 @@ export default {
     BagHandleOutline,
     ChatbubblesOutline,
     HeartOutline,
-    CartOutline
+    CartOutline,
+    User
   },
   setup () {
     return {
       Wordmark
     }
+  },
+  methods: {
+    handleAccediButton : function(event){
+      window.open('/Login', "_self");
+    }
   }
 }
+
 </script>
 
 <template>
+  <n-config-provider :theme-overrides="theme">
+    <n-space justify="space-evenly" class="background" style="padding-top:21px">
+        <!--sezione link-->
+        <Wordmark witdh="150px" height="50px"/>
+      
+        <n-space justify="space-between" size="large">
 
-  <n-space justify="space-evenly" class="background" style="padding-top:21px">
-      <!--sezione link-->
-      <Wordmark witdh="150px" height="50px" color="#1D1D1D"/>
-    
-      <n-space justify="space-between" size="large">
-        <a href="">
-        <Icon size="30" color="#1D1D1D">
-            <BagHandleOutline />
-        </Icon><span class="t-medium" style="color:#1D1D1D">Negozio</span></a>
+          <a href="">
+            <n-space align="center" size="small">
+              <Icon size="30" color="#1D1D1D">
+                <BagHandleOutline />
+              </Icon><span class="t-medium" style="color:#1D1D1D">Negozio</span>
+            </n-space>
+          </a>
+          
+          <n-space align="center" size="small">
+            <Icon size="30" color="#1D1D1D">
+              <Box16Regular />
+            </Icon><span class="t-medium" style="color:#1D1D1D">Vendi</span>
+            </n-space>
 
-        <a href="">
-        <Icon size="30" color="#1D1D1D">
-            <Box16Regular />
-        </Icon><span class="t-medium" style="color:#1D1D1D">Vendi</span></a>
+          <n-space align="center" size="small">
+            <Icon size="30" color="#1D1D1D">
+              <ChatbubblesOutline />
+            </Icon><span class="t-medium" style="color:#1D1D1D">Messaggi</span>
+          </n-space>
 
-        <a href="">
-        <Icon size="30" color="#1D1D1D">
-            <ChatbubblesOutline />
-        </Icon><span class="t-medium" style="color:#1D1D1D">Messaggi</span></a>
+          <n-space align="center" size="small">
+            <Icon size="30" color="#1D1D1D">
+              <HeartOutline />
+            </Icon><span class="t-medium" style="color:#1D1D1D">Wishlist</span>
+          </n-space>
 
-        <a href="">
-        <Icon size="30" color="#1D1D1D">
-            <HeartOutline />
-        </Icon><span class="t-medium" style="color:#1D1D1D">Wishlist</span></a>
-
-        <a href="">
-        <Icon size="30" color="#1D1D1D">
-            <CartOutline />
-        </Icon><span class="t-medium" style="color:#1D1D1D">Carrello</span></a>
+            <n-space align="center" size="small">
+              <Icon size="30" color="#1D1D1D">
+                <CartOutline />
+              </Icon><span class="t-medium" style="color:#1D1D1D">Carrello</span>
+            </n-space>
+        </n-space>
+      
+      <!--se l'utente è già loggato ovvero, è presente una sessione, sarà presente il link al profilo
+      altrimenti un bottone per accedere-->  
+      <div v-if="isLogged">
+        <n-space align="center" size="small">
+          <Icon size="30" color="#1D1D1D">
+            <User />
+          </Icon><span class="t-medium" style="color:#1D1D1D">Il tuo profilo</span>
+        </n-space>
+      </div>
+      <div v-else>
+        <n-button round ghost size="large" type="primary" @click="handleAccediButton()"><span class="t-normal-bold">Accedi</span></n-button>
+      </div>
+      
     </n-space>
-    <n-button round ghost size="large" type="primary"><span class="t-normal-bold">Accedi</span></n-button>
-  </n-space>
-
+  </n-config-provider>
 </template>
 
 <style scoped>

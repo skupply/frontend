@@ -18,7 +18,7 @@ export default {
 <template>
 
   <n-space vertical justify="center" class="background">
-    <n-space class="links" justify="space-evenly" size="large" style="padding: 20px 0;">
+    <n-space class="links" justify="space-evenly" size="large" style="padding: 40px 0;">
       <!--sezione link-->
       <a href="" class="t-small-bold">FAQ</a>       
       <a href="" class="t-small-bold">Risorse</a>
@@ -54,14 +54,13 @@ export default {
     <!-- sezione extra-->
     <n-space justify="center" size="medium" style="padding-top: 40px; padding-bottom: 20px;">
         <span class="t-small-bold" style="color: #828282">© 2022</span>
-        <a href="" class="t-small-bold" style="color: #828282">Privacy - Termini</a>
+        <a href="" class="t-small-bold">Privacy - Termini</a>
     </n-space>
   </n-space>
 
 </template>
 
 <style scoped>
-
 .background{
   background-color: #282828;
 }
