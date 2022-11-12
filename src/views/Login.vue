@@ -16,14 +16,17 @@
         rules: {
           email: {
             required: true,
-            message: 'Please input your email',
+            message: 'Inserisca la sua email',
             trigger: ['input', 'blur']
           },
           password: {
             required: true,
-            message: 'Please input your password',
+            message: 'Inserisca la sua password',
             trigger: ['input', 'blur']
           }
+        },
+        signupRedirect () {
+          window.location.replace('/signup');
         },
         handleValidateClick (event) {
           event.preventDefault()
@@ -41,7 +44,7 @@
 </script>
 
 <template>
-  <n-space justify="center" align="center" style="gap: 50px; padding-top: 12vh; padding-bottom: 101px;">
+  <n-space justify="center" align="center" style="min-height: calc(100vh - 64px); gap: 50px;">
       <img src="../images/Login.png"/>
 
       <n-form
@@ -77,7 +80,7 @@
               </n-space>
               <n-space vertical align="stretch">
                 <span class="t-small">Non hai ancora un account?</span>
-                <n-button round size="large" type="info" block @click="">Registrati</n-button>
+                <n-button round size="large" type="info" block @click="signupRedirect">Registrati</n-button>
               </n-space>
             </n-space>
           </n-space>

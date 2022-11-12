@@ -9,6 +9,7 @@ import { Icon } from '@vicons/utils'
 export default {
   data(){
     return {
+      color: "#1D1D1D",
       theme:{
         Button: {
             paddingRoundLarge: "10px 40px",
@@ -49,41 +50,52 @@ export default {
   <n-config-provider :theme-overrides="theme">
     <n-space justify="space-evenly" class="background" style="height: 64px; align-items: center;">
         <!--sezione link-->
-        <Wordmark witdh="100px" height="30px"/>
+        <a href="/">
+          <Wordmark width="100px" height="50px" />
+        </a>
       
         <n-space justify="space-between" size="large">
 
-          <a href="market">
+          <a href="/market">
             <n-space align="center" size="small">
-              <Icon size="30" color="#1D1D1D">
+              <Icon size="30" :color="color">
                 <BagHandleOutline />
-              </Icon><span class="t-medium" style="color:#1D1D1D">Negozio</span>
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Negozio</span>
             </n-space>
           </a>
-          
-          <n-space align="center" size="small">
-            <Icon size="30" color="#1D1D1D">
-              <Box16Regular />
-            </Icon><span class="t-medium" style="color:#1D1D1D">Vendi</span>
-            </n-space>
-
-          <n-space align="center" size="small">
-            <Icon size="30" color="#1D1D1D">
-              <ChatbubblesOutline />
-            </Icon><span class="t-medium" style="color:#1D1D1D">Messaggi</span>
-          </n-space>
-
-          <n-space align="center" size="small">
-            <Icon size="30" color="#1D1D1D">
-              <HeartOutline />
-            </Icon><span class="t-medium" style="color:#1D1D1D">Wishlist</span>
-          </n-space>
-
+          <a href="/sell">
             <n-space align="center" size="small">
-              <Icon size="30" color="#1D1D1D">
-                <CartOutline />
-              </Icon><span class="t-medium" style="color:#1D1D1D">Carrello</span>
+              <Icon size="30" :color="color">
+                <Box16Regular />
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Vendi</span>
             </n-space>
+          </a>
+          <a href="/chat">
+            <n-space align="center" size="small">
+              <Icon size="30" :color="color">
+                <ChatbubblesOutline />
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Messaggi</span>
+            </n-space>
+          </a>
+          <a href="/wishlish">
+            <n-space align="center" size="small">
+              <Icon size="30" :color="color">
+                <HeartOutline />
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Wishlist</span>
+            </n-space>
+          </a>
+          <a href="/cart">
+            <n-space align="center" size="small">
+              <Icon size="30" :color="color">
+                <CartOutline />
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Carrello</span>
+            </n-space>
+          </a>
         </n-space>
       
       <!--se l'utente è già loggato ovvero, è presente una sessione, sarà presente il link al profilo
@@ -104,7 +116,6 @@ export default {
 </template>
 
 <style scoped>
-
 .background{
   background-color: #FEFEFE;
 }
@@ -112,5 +123,4 @@ export default {
 a:link {
   text-decoration: none;
 }
-
 </style>
