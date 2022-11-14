@@ -19,7 +19,12 @@ export default {
             gapLarge: "8px 50px"
           }
       },
-      isLogged : false /*controllare se è presenta una sessione*/
+    }
+  },
+  setup () {
+    const storeUser = useUserStore();
+    return {
+      isLogged: false 
     }
   },
   components: {

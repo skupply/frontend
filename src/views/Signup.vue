@@ -1,8 +1,9 @@
 <script>
   import { ref } from 'vue'
   import { useMessage } from 'naive-ui'
+  import { useEndpointStore } from '../stores/endpoint'
 
-  const endpoint = 'http://localhost:3000';
+  let store;
 
   async function CreateUser(data) {
     let ok = false;
@@ -24,7 +25,7 @@
         isSeller: data.seller
       })
     };
-    const result = await fetch(`${endpoint}/user/`, requestOptions)
+    const result = await fetch(`${store.endpoint}/user/`, requestOptions)
       .then(response => response.json())
       .then(data => data.ok);
 
@@ -39,7 +40,7 @@
       headers: { 'Content-Type': 'application/json' }
       //body: JSON.stringify({ username: username })
     };
-    await fetch(`${endpoint}/user/?username=${username}`, requestOptions)
+    await fetch(`${store.endpoint}/user/?username=${username}`, requestOptions)
       .then(response => response.json())
       .then(data => (available = data.available));
     
@@ -54,7 +55,7 @@
       headers: { 'Content-Type': 'application/json' }
       //body: JSON.stringify({ username: username })
     };
-    await fetch(`${endpoint}/email/?email=${email}`, requestOptions)
+    await fetch(`${store.endpoint}/email/?email=${email}`, requestOptions)
       .then(response => response.json())
       .then(data => (available = data.available));
     
@@ -68,14 +69,13 @@
         elem.onkeydown = event => { if (event.keyCode == 0x09 && !event.shiftKey) return false; };
     },
     setup () {
+      store = useEndpointStore()
       const formRef1 = ref(null)
       const formRef2 = ref(null)
       const formRef3 = ref(null)
       const message = useMessage()
       return {
-        formRef1,
-        formRef2,
-        formRef3,
+        formRef1, formRef2, formRef3,
         size: 'large',
         model: ref({
           firstname: '',
@@ -106,7 +106,8 @@
           email: {
             required: true,
             message: 'Inserisca la sua email',
-            trigger: ['input', 'blur']
+            trigger: ['input', 'blur'],
+            type: 'email'
           },
           password: {
             required: true,
@@ -152,11 +153,6 @@
                 ok = false;
               }
 
-              if (!data.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
-                message.error('Email non valida');
-                ok = false;
-              }
-              
               available = await EmailAvailable(data.email);
               if (!available) {
                 message.error('Questa email non esiste');
@@ -273,7 +269,7 @@
               </n-space>
               <n-space vertical style="gap: 20px;">
                 <n-space vertical align="stretch">
-                  <n-button round size="large" type="primary" block @click="handleValidateClick1">Registrati</n-button>
+                  <n-button round size="large" type="primary" block @click="handleValidateClick1">Continua</n-button>
                 </n-space>
                 <n-space vertical align="stretch">
                   <span class="t-small">Possiedi già un account?</span>

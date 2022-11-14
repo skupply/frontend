@@ -1,9 +1,33 @@
 <script>
   import { ref } from 'vue'
   import { useMessage } from 'naive-ui'
+  import { useEndpointStore } from '../stores/endpoint'
+
+  let store;
+  async function LoginUser(data) {
+    let ok = false;
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Accept': 'application/json' },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+      })
+    };
+    const result = await fetch(`${store.endpoint}/user/login/`, requestOptions)
+      .then(response => response.json())
+      .then(data => data.ok);
+
+    return result;
+  }
 
   export default {
     setup () {
+      store = useEndpointStore()
       const formRef = ref(null)
       const message = useMessage()
       return {
@@ -17,7 +41,8 @@
           email: {
             required: true,
             message: 'Inserisca la sua email',
-            trigger: ['input', 'blur']
+            trigger: ['input', 'blur'],
+            type: 'email'
           },
           password: {
             required: true,
@@ -30,9 +55,21 @@
         },
         handleValidateClick (event) {
           event.preventDefault()
-          formRef.value?.validate((errors) => {
+          formRef.value?.validate(async errors => {
             if (!errors) {
-              message.success('Campi validi')
+              let ok = true;
+              const data = formRef.value.model;
+
+              const result = await LoginUser(data);
+              if (!result) {
+                message.error('Credenziali errate');
+                ok = false;
+              }
+
+              if (ok) {
+                message.success('Campi validi');
+                window.location.href = '/';
+              }
             } else {
               message.error('Campi non validi')
             }
