@@ -2,7 +2,71 @@
   import { ref } from 'vue'
   import { useMessage } from 'naive-ui'
 
+  const endpoint = 'http://localhost:3000';
+
+  async function CreateUser(data) {
+    let ok = false;
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Accept': 'application/json' },
+      body: JSON.stringify({
+        firstName: data.firstname,
+        lastName: data.lastname,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        address: data.address,
+        phone: data.phone,
+        isSeller: data.seller
+      })
+    };
+    const result = await fetch(`${endpoint}/user/`, requestOptions)
+      .then(response => response.json())
+      .then(data => data.ok);
+
+    return result;
+  }
+
+  async function UsernameAvailable(username) {
+    let available = false;
+
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+      //body: JSON.stringify({ username: username })
+    };
+    await fetch(`${endpoint}/user/?username=${username}`, requestOptions)
+      .then(response => response.json())
+      .then(data => (available = data.available));
+    
+    return available;
+  }
+
+  async function EmailAvailable(email) {
+    let available = false;
+
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+      //body: JSON.stringify({ username: username })
+    };
+    await fetch(`${endpoint}/email/?email=${email}`, requestOptions)
+      .then(response => response.json())
+      .then(data => (available = data.available));
+    
+    return available;
+  }
+
   export default {
+    mounted () {
+      const elements = document.getElementsByClassName('prevent-tab')
+      for (const elem of elements)
+        elem.onkeydown = event => { if (event.keyCode == 0x09 && !event.shiftKey) return false; };
+    },
     setup () {
       const formRef1 = ref(null)
       const formRef2 = ref(null)
@@ -77,10 +141,32 @@
         },
         handleValidateClick1 (event) {
           event.preventDefault()
-          formRef1.value?.validate((errors) => {
+          formRef1.value?.validate(async errors => {
             if (!errors) {
-              message.success('Campi validi')
-              document.getElementById('next').click();
+              let ok = true;
+              const data = formRef1.value.model;
+
+              let available = await UsernameAvailable(data.username);
+              if (!available) {
+                message.error('Username già in uso');
+                ok = false;
+              }
+
+              if (!data.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+                message.error('Email non valida');
+                ok = false;
+              }
+              
+              available = await EmailAvailable(data.email);
+              if (!available) {
+                message.error('Questa email non esiste');
+                ok = false;
+              }
+
+              if (ok) {
+                message.success('Campi validi')
+                document.getElementById('next').click();
+              }
             } else {
               message.error('Campi non validi')
             }
@@ -88,11 +174,21 @@
         },
         handleValidateClick2 (event) {
           event.preventDefault()
-          formRef2.value?.validate((errors) => {
+          formRef2.value?.validate(errors => {
             if (!errors) {
               if (formRef2.value.model.password == formRef2.value.model.confirmPassword) {
-                message.success('Campi validi')
-                document.getElementById('next').click();
+                let ok = true;
+                const data = formRef2.value.model;
+
+                if (!data.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/)) {
+                  message.error('La password non rispetta i requisiti');
+                  ok = false;
+                }
+
+                if (ok) {
+                  message.success('Campi validi')
+                  document.getElementById('next').click();
+                }
               } else {
                 message.error('Le password non coincidono')
               }
@@ -103,10 +199,24 @@
         },
         handleValidateClick3 (event) {
           event.preventDefault()
-          formRef3.value?.validate((errors) => {
+          formRef3.value?.validate(async errors => {
             if (!errors) {
-              message.success('Campi validi')
-              document.getElementById('next').click();
+              let ok = true;
+              const data = formRef3.value.model;
+
+              data.phone = data.phone.replace(/\s/g, '');
+              if (data.seller && !data.phone.match(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/)) {
+                message.error('Numero telefonico non valido');
+                ok = false;
+              }
+
+              if (ok) {
+                message.success('Campi validi');
+                document.getElementById('next').click();
+
+                const result = await CreateUser(data);
+                if (!result) message.error('Errore durante la creazione dell\'account');
+              }
             } else {
               message.error('Campi non validi')
             }
@@ -167,7 +277,7 @@
                 </n-space>
                 <n-space vertical align="stretch">
                   <span class="t-small">Possiedi già un account?</span>
-                  <n-button round size="large" type="info" block @click="loginRedirect">Accedi</n-button>
+                  <n-button class="prevent-tab" round size="large" type="info" block @click="loginRedirect">Accedi</n-button>
                 </n-space>
               </n-space>
             </n-space>
@@ -205,7 +315,8 @@
               </n-space>
               <n-space vertical style="gap: 20px;">
                 <n-space vertical align="stretch">
-                  <n-button round size="large" type="primary" block @click="handleValidateClick2">Continua</n-button>
+                  <n-button class="prevent-tab" round size="large" type="primary" block @click="handleValidateClick2">Continua</n-button>
+                  <span class="t-small">La password deve essere lunga almeno 8 caratteri, contenere almeno una maiuscola, una minuscola, un numero ed uno dei seguenti caratteri speciali !@#$%^&*</span>
                 </n-space>
               </n-space>
             </n-space>
@@ -249,7 +360,7 @@
               <n-space vertical style="gap: 20px;">
                 <n-space vertical align="stretch">
                   <span class="t-small">Sei indeciso? Nessun problema, potrai completare il tuo profilo e diventare venditore anche in un secondo momento</span>
-                  <n-button round size="large" type="primary" block @click="handleValidateClick3">Continua</n-button>
+                  <n-button class="prevent-tab" round size="large" type="primary" block @click="handleValidateClick3">Continua</n-button>
                   <span class="t-small">Confermando l’iscrizione si dichiara di aver preso visione ed accettato i <a href="/terms" target="_blank" style="color: #404040; font-weight: 500">termini e le condizioni</a></span>
                 </n-space>
               </n-space>
