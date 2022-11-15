@@ -2,8 +2,11 @@
   import { ref } from 'vue'
   import { useMessage } from 'naive-ui'
   import { useEndpointStore } from '../stores/endpoint'
+  import { useUserStore } from '../stores/user'
+  import router from '../router'
 
-  let store;
+  let user;
+  let endpoint;
   async function LoginUser(data) {
     let ok = false;
 
@@ -18,16 +21,17 @@
         password: data.password,
       })
     };
-    const result = await fetch(`${store.endpoint}/user/login/`, requestOptions)
+    const result = await fetch(`${endpoint.endpoint}/login/`, requestOptions)
       .then(response => response.json())
-      .then(data => data.ok);
+      .then(data => { return {ok: data.ok, token: data.token} });
 
     return result;
   }
 
   export default {
     setup () {
-      store = useEndpointStore()
+      user = useUserStore()
+      endpoint = useEndpointStore()
       const formRef = ref(null)
       const message = useMessage()
       return {
@@ -61,14 +65,15 @@
               const data = formRef.value.model;
 
               const result = await LoginUser(data);
-              if (!result) {
+              if (!result.ok) {
                 message.error('Credenziali errate');
                 ok = false;
               }
 
               if (ok) {
+                user.setToken(result.token);
                 message.success('Campi validi');
-                window.location.href = '/';
+                router.push('/');
               }
             } else {
               message.error('Campi non validi')
@@ -112,7 +117,7 @@
             </n-space>
             <n-space vertical style="gap: 20px;">
               <n-space vertical align="stretch">
-                <a href="" class="t-small" style="text-decoration: none">Password dimenticata?</a>
+                <router-link to="" class="t-small" style="text-decoration: none">Password dimenticata?</router-link>
                 <n-button round size="large" type="primary" block @click="handleValidateClick">Accedi</n-button>
               </n-space>
               <n-space vertical align="stretch">
