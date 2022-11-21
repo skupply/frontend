@@ -5,6 +5,8 @@ import NotFound from '../views/404.vue'
 import ServerError from '../views/500.vue'
 import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
+import Profile from '../views/Profile.vue'
+import Cart from '../views/Cart.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +24,16 @@ const router = createRouter({
             path: '/signup',
             name: 'signup',
             component: Signup
+        },
+        {
+            path: '/profile',
+            name: 'profile',
+            component: Profile
+        },
+        {
+            path: '/cart',
+            name: 'cart',
+            component: Cart
         },
         {
           path: '/:pathMatch([5].*)*',

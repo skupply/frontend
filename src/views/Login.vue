@@ -72,6 +72,7 @@
 
               if (ok) {
                 user.setToken(result.token);
+                user.setEmail(data.email);
                 message.success('Campi validi');
                 router.push('/');
               }
