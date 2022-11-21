@@ -16,15 +16,14 @@ export default {
 </script>
 
 <template>
-
   <n-space vertical justify="center" class="background">
     <n-space class="links" justify="space-evenly" size="large" style="padding: 40px 0;">
       <!--sezione link-->
-      <a href="" class="t-small-bold">FAQ</a>       
-      <a href="" class="t-small-bold">Risorse</a>
+      <router-link to="" class="t-small-bold">FAQ</router-link>       
+      <router-link to="" class="t-small-bold">Risorse</router-link>
       <Wordmark width="150px" height="50px" color="#828282" />
-      <a href="" class="t-small-bold">Riguardo a noi</a>
-      <a href="" class="t-small-bold">Supporto</a>
+      <router-link to="" class="t-small-bold">Riguardo a noi</router-link>
+      <router-link to="" class="t-small-bold">Supporto</router-link>
     </n-space>
 
     <!--sezione social media-->
@@ -54,7 +53,7 @@ export default {
     <!-- sezione extra-->
     <n-space justify="center" size="medium" style="padding-top: 40px; padding-bottom: 20px;">
         <span class="t-small-bold" style="color: #828282">© 2022</span>
-        <a href="" class="t-small-bold">Privacy - Termini</a>
+        <router-link to="" class="t-small-bold">Privacy - Termini</router-link>
     </n-space>
   </n-space>
 

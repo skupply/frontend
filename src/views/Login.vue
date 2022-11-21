@@ -1,9 +1,37 @@
 <script>
   import { ref } from 'vue'
   import { useMessage } from 'naive-ui'
+  import { useEndpointStore } from '../stores/endpoint'
+  import { useUserStore } from '../stores/user'
+  import router from '../router'
+
+  let user;
+  let endpoint;
+  async function LoginUser(data) {
+    let ok = false;
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Accept': 'application/json' },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+      })
+    };
+    const result = await fetch(`${endpoint.endpoint}/login/`, requestOptions)
+      .then(response => response.json())
+      .then(data => { return {ok: data.ok, token: data.token} });
+
+    return result;
+  }
 
   export default {
     setup () {
+      user = useUserStore()
+      endpoint = useEndpointStore()
       const formRef = ref(null)
       const message = useMessage()
       return {
@@ -16,20 +44,37 @@
         rules: {
           email: {
             required: true,
-            message: 'Please input your email',
-            trigger: ['input', 'blur']
+            message: 'Inserisca la sua email',
+            trigger: ['input', 'blur'],
+            type: 'email'
           },
           password: {
             required: true,
-            message: 'Please input your password',
+            message: 'Inserisca la sua password',
             trigger: ['input', 'blur']
           }
         },
+        signupRedirect () {
+          window.location.replace('/signup');
+        },
         handleValidateClick (event) {
           event.preventDefault()
-          formRef.value?.validate((errors) => {
+          formRef.value?.validate(async errors => {
             if (!errors) {
-              message.success('Campi validi')
+              let ok = true;
+              const data = formRef.value.model;
+
+              const result = await LoginUser(data);
+              if (!result.ok) {
+                message.error('Credenziali errate');
+                ok = false;
+              }
+
+              if (ok) {
+                user.setToken(result.token);
+                message.success('Campi validi');
+                router.push('/');
+              }
             } else {
               message.error('Campi non validi')
             }
@@ -41,7 +86,7 @@
 </script>
 
 <template>
-  <n-space justify="center" align="center" style="gap: 50px; padding-top: 12vh; padding-bottom: 101px;">
+  <n-space justify="center" align="center" style="min-height: calc(100vh - 64px); gap: 50px;">
       <img src="../images/Login.png"/>
 
       <n-form
@@ -72,12 +117,12 @@
             </n-space>
             <n-space vertical style="gap: 20px;">
               <n-space vertical align="stretch">
-                <a href="" class="t-small" style="text-decoration: none">Password dimenticata?</a>
+                <router-link to="" class="t-small" style="text-decoration: none">Password dimenticata?</router-link>
                 <n-button round size="large" type="primary" block @click="handleValidateClick">Accedi</n-button>
               </n-space>
               <n-space vertical align="stretch">
                 <span class="t-small">Non hai ancora un account?</span>
-                <n-button round size="large" type="info" block @click="">Registrati</n-button>
+                <n-button round size="large" type="info" block @click="signupRedirect">Registrati</n-button>
               </n-space>
             </n-space>
           </n-space>

@@ -5,10 +5,12 @@ import { Box16Regular } from '@vicons/fluent'
 import { User } from '@vicons/carbon'
 import { BagHandleOutline, ChatbubblesOutline, HeartOutline, CartOutline } from '@vicons/ionicons5'
 import { Icon } from '@vicons/utils'
+import { useUserStore } from '../stores/user'
 
 export default {
   data(){
     return {
+      color: "#1D1D1D",
       theme:{
         Button: {
             paddingRoundLarge: "10px 40px",
@@ -18,7 +20,6 @@ export default {
             gapLarge: "8px 50px"
           }
       },
-      isLogged : false /*controllare se è presenta una sessione*/
     }
   },
   components: {
@@ -32,63 +33,74 @@ export default {
     User
   },
   setup () {
+    const userStore = useUserStore();
+    const test = () => {
+      console.log(userStore.token);
+    }
     return {
+      test,
+      userStore,
       Wordmark
     }
   },
-  methods: {
-    handleAccediButton : function(event){
-      window.open('/Login', "_self");
-    }
-  }
 }
-
 </script>
 
 <template>
   <n-config-provider :theme-overrides="theme">
     <n-space justify="space-evenly" class="background" style="height: 64px; align-items: center;">
         <!--sezione link-->
-        <Wordmark witdh="100px" height="30px"/>
+        <router-link to="/">
+          <Wordmark width="100px" height="50px" />
+        </router-link>
       
         <n-space justify="space-between" size="large">
 
-          <a href="market">
+          <router-link to="/market">
             <n-space align="center" size="small">
-              <Icon size="30" color="#1D1D1D">
+              <Icon size="30" :color="color">
                 <BagHandleOutline />
-              </Icon><span class="t-medium" style="color:#1D1D1D">Negozio</span>
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Negozio</span>
             </n-space>
-          </a>
-          
-          <n-space align="center" size="small">
-            <Icon size="30" color="#1D1D1D">
-              <Box16Regular />
-            </Icon><span class="t-medium" style="color:#1D1D1D">Vendi</span>
-            </n-space>
-
-          <n-space align="center" size="small">
-            <Icon size="30" color="#1D1D1D">
-              <ChatbubblesOutline />
-            </Icon><span class="t-medium" style="color:#1D1D1D">Messaggi</span>
-          </n-space>
-
-          <n-space align="center" size="small">
-            <Icon size="30" color="#1D1D1D">
-              <HeartOutline />
-            </Icon><span class="t-medium" style="color:#1D1D1D">Wishlist</span>
-          </n-space>
-
+          </router-link>
+          <router-link to="/sell">
             <n-space align="center" size="small">
-              <Icon size="30" color="#1D1D1D">
-                <CartOutline />
-              </Icon><span class="t-medium" style="color:#1D1D1D">Carrello</span>
+              <Icon size="30" :color="color">
+                <Box16Regular />
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Vendi</span>
             </n-space>
+          </router-link>
+          <router-link to="/chat">
+            <n-space align="center" size="small">
+              <Icon size="30" :color="color">
+                <ChatbubblesOutline />
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Messaggi</span>
+            </n-space>
+          </router-link>
+          <router-link to="/wishlish">
+            <n-space align="center" size="small">
+              <Icon size="30" :color="color">
+                <HeartOutline />
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Wishlist</span>
+            </n-space>
+          </router-link>
+          <router-link to="/cart">
+            <n-space align="center" size="small">
+              <Icon size="30" :color="color">
+                <CartOutline />
+              </Icon>
+              <span class="t-medium" :style="`color: ${color};`">Carrello</span>
+            </n-space>
+          </router-link>
         </n-space>
       
       <!--se l'utente è già loggato ovvero, è presente una sessione, sarà presente il link al profilo
       altrimenti un bottone per accedere-->  
-      <div v-if="isLogged">
+      <div v-if="userStore.token">
         <n-space align="center" size="small">
           <Icon size="30" color="#1D1D1D">
             <User />
@@ -96,7 +108,9 @@ export default {
         </n-space>
       </div>
       <div v-else>
-        <n-button round ghost size="large" type="primary" @click="handleAccediButton()"><span class="t-normal-bold">Accedi</span></n-button>
+        <router-link to="/login">
+          <n-button round ghost size="large" type="primary"><span class="t-normal-bold">Accedi</span></n-button>
+        </router-link>
       </div>
       
     </n-space>
@@ -104,7 +118,6 @@ export default {
 </template>
 
 <style scoped>
-
 .background{
   background-color: #FEFEFE;
 }
@@ -112,5 +125,4 @@ export default {
 a:link {
   text-decoration: none;
 }
-
 </style>
