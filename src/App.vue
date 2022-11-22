@@ -1,5 +1,5 @@
 <script>
-  import { RouterView} from 'vue-router'
+  import { RouterView } from 'vue-router'
 
   import Footer from './components/Footer.vue'
   import NavBar from './components/NavBar.vue'
@@ -52,6 +52,7 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 body {
@@ -101,6 +102,15 @@ body::-webkit-scrollbar {
   color: #FEFEFE;
 }
 
+.t-h5{
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 26px;
+  color: #44355B;
+}
+
 .t-normal-bold{
   font-family: 'Roboto';
   font-style: normal;
@@ -118,6 +128,15 @@ body::-webkit-scrollbar {
   line-height: 25px;
   text-align: center;
   color: #FEFEFE;
+}
+
+.t-medium-bold{
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25px;
+  color: #828282;
 }
 
 .t-small-bold{

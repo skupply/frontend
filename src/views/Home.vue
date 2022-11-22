@@ -29,7 +29,7 @@
       </n-space>
 
       <!--cards-->
-      <n-grid :cols="5" :rows="3" :y-gap="30">
+      <n-grid :cols="5" :y-gap="30">
         <!--card1-->
         <n-grid-item :offset="1" style="width:60vw;" span="4">
           <n-card>
