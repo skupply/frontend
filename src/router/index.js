@@ -5,12 +5,9 @@ import NotFound from '../views/404.vue'
 import ServerError from '../views/500.vue'
 import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
-<<<<<<< Updated upstream
 import Profile from '../views/Profile.vue'
 import Cart from '../views/Cart.vue'
-=======
 import Market from '../views/Market.vue'
->>>>>>> Stashed changes
 
 const router = createRouter({
     history: createWebHistory(
@@ -31,7 +28,6 @@ const router = createRouter({
             component: Signup
         },
         {
-<<<<<<< Updated upstream
             path: '/profile',
             name: 'profile',
             component: Profile
@@ -42,10 +38,6 @@ const router = createRouter({
             component: Cart
         },
         {
-          path: '/:pathMatch([5].*)*',
-          name: '500',
-          component: ServerError
-=======
             path: '/market',
             name: 'market',
             component: Market
@@ -54,7 +46,6 @@ const router = createRouter({
             path: '/:pathMatch([5].*)*',
             name: '500',
             component: ServerError
->>>>>>> Stashed changes
         },
         {
             path: '/:pathMatch(.*)*',
