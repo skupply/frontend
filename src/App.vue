@@ -102,6 +102,16 @@ body::-webkit-scrollbar {
   color: #FEFEFE;
 }
 
+.t-h2{
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 48px;
+  line-height:52.3px;
+  text-align: center;
+  color: #FEFEFE;
+}
+
 .t-h5{
   font-family: 'Quicksand';
   font-style: normal;
