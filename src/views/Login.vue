@@ -23,7 +23,7 @@
     };
     const result = await fetch(`${endpoint.endpoint}/login/`, requestOptions)
       .then(response => response.json())
-      .then(data => { return {ok: data.ok, token: data.token} });
+      .then(data => { return {ok: data.ok, token: data.token, username: data.username} });
 
     return result;
   }
@@ -73,6 +73,7 @@
               if (ok) {
                 user.setToken(result.token);
                 user.setEmail(data.email);
+                user.setUsername(result.username);
                 message.success('Campi validi');
                 router.push('/');
               }

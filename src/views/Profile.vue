@@ -1,11 +1,10 @@
 <script>
-
-import Account from '../components/ProfileAccount.vue'
+import { useUserStore } from '../stores/user'
 
 export default{
     setup () {
         return {
-            userName: "ProvaUser",//da prendere il valore dalla sessione
+            userName: useUserStore().getUsername(),//da prendere il valore dalla sessione
         }
     },
     data(){
@@ -25,7 +24,6 @@ export default{
             this.visualizzaPrivato ? this.buttonText = "venditore" : this.buttonText = "privato";
         }
     }
-   
 }
 
 </script>
@@ -54,7 +52,6 @@ export default{
                             <span class="t-medium-bold">Acquisti</span>
                         </n-tab-pane>
 
-                        <Account></Account>
                     </n-tabs>    
                 </div>
 
