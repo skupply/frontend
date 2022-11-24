@@ -3,7 +3,7 @@
 import Wordmark from './icons/Wordmark.vue'
 import { Box16Regular } from '@vicons/fluent'
 import { User } from '@vicons/carbon'
-import { BagHandleOutline, ChatbubblesOutline, HeartOutline, CartOutline } from '@vicons/ionicons5'
+import { BagHandleOutline, ChatbubblesOutline, HeartOutline, CartOutline, LogOutOutline } from '@vicons/ionicons5'
 import { Icon } from '@vicons/utils'
 import { useUserStore } from '../stores/user'
 
@@ -22,6 +22,13 @@ export default {
       },
     }
   },
+  methods:{
+    logout(){
+      let user = useUserStore();
+      user.reset();
+      location.replace("/");
+    }
+  },
   components: {
     Wordmark,
     Icon,
@@ -30,6 +37,7 @@ export default {
     ChatbubblesOutline,
     HeartOutline,
     CartOutline,
+    LogOutOutline,
     User
   },
   setup () {
@@ -101,18 +109,24 @@ export default {
       <!--se l'utente è già loggato ovvero, è presente una sessione, sarà presente il link al profilo
       altrimenti un bottone per accedere-->  
       <div v-if="userStore.token">
-        <n-space align="center" size="small">
-          <Icon size="30" color="#1D1D1D">
-            <User />
-          </Icon><span class="t-medium" style="color:#1D1D1D">Il tuo profilo</span>
-        </n-space>
+        <router-link to="/profile">
+          <n-space align="center" size="small">
+            <Icon size="30" color="#1D1D1D">
+              <User />
+            </Icon><span class="t-medium" style="color:#1D1D1D">Il tuo profilo</span>
+            <n-button type="quaternary" @click="logout">
+              <Icon size="30" color="#1D1D1D">
+                <LogOutOutline />
+              </Icon>
+            </n-button>
+          </n-space>
+        </router-link>
       </div>
       <div v-else>
         <router-link to="/login">
           <n-button round ghost size="large" type="primary"><span class="t-normal-bold">Accedi</span></n-button>
         </router-link>
       </div>
-      
     </n-space>
   </n-config-provider>
 </template>
