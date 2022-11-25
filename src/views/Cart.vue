@@ -8,7 +8,7 @@ let endpoint;
 export default{
     data(){
         return{
-            articoli: []//gli articoli presenti nel carrello
+            articoli: [],//array contenent gli articoli
         }
     },
     setup(){
@@ -37,7 +37,6 @@ export default{
             .then(response => response.json())
             .then((cart) => { 
                 this.articoli = cart;
-                return cart; 
             })
 
         },
@@ -101,7 +100,8 @@ export default{
  
             const result = await fetch(`${endpoint.endpoint}/cart/`, requestOptions)
             .then(response => {
-                response.json();})
+                response.json();
+            })
             
         },
         remove(id){//funzione per la rimozione di un articolo dal carrello  
@@ -131,6 +131,12 @@ effettuato il fetch-->
         <br/>
     </n-space>
 </div>
+
+<div v-for="articolo in articoli.articles">
+    <span>{{articolo.title}}</span>
+</div>
+
+
 </pre>
 
 </template>
