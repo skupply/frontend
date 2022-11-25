@@ -11,6 +11,11 @@ export default{
             articoli: []//gli articoli presenti nel carrello
         }
     },
+    setup(){
+        return{
+            checkQuantity: (x) => x>0
+        };
+    },
     methods:{
         //funzione che ritorna gli articoli inseriti nel carrello dall'utente
         async CartItems() {
@@ -77,8 +82,33 @@ export default{
                 }
             })
         },
+        async updateItemQuantity(id, quantity){
+            console.log("called setQuantity");
+            let email = user.getEmail();
+
+            const requestOptions = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    id: id,
+                    quantity: quantity
+                })
+            };
+ 
+            const result = await fetch(`${endpoint.endpoint}/cart/`, requestOptions)
+            .then(response => {
+                response.json();})
+            
+        },
         remove(id){//funzione per la rimozione di un articolo dal carrello  
             this.removeItem(id);
+        },
+        setQuantity(id, q){//funzione per la modifica della quantità del prodotto nel database
+            this.updateItemQuantity(id, q);
         }
     },
     mounted(){//al caricamento della pagina eseguo la funzione
@@ -93,8 +123,14 @@ export default{
 effettuato il fetch-->
 <p v-if="!articoli">Loading..</p>
 <pre v-else>
-<li v-for="articolo in articoli.cart">id item: {{articolo.id}} pz: {{articolo.quantity}}<button type="secondary" @click="remove(articolo.id)">Elimina</button>
-</li>
+<div v-for="articolo in articoli.cart">
+    <n-space>
+        <span>id item: {{articolo.id}} pz: {{articolo.quantity}}</span>
+        <n-button round type="info" @click="remove(articolo.id)">Elimina</n-button>
+        <n-input-number :default-value="articolo.quantity" v-model:value="articolo.quantity" :validator="checkQuantity" @update:value="setQuantity(articolo.id, articolo.quantity)" clearable/>
+        <br/>
+    </n-space>
+</div>
 </pre>
 
 </template>
