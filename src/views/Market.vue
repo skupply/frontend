@@ -1,9 +1,10 @@
 <script>
-    import Card from "../components/Card.vue" ;
-    import { SearchOutline } from '@vicons/ionicons5';
-    import { Icon } from '@vicons/utils';
-    import { defineComponent, ref } from "vue";
-    import { useMessage } from "naive-ui";
+    import Card from "../components/Card.vue"
+    import { SearchOutline } from '@vicons/ionicons5'
+    import { Icon } from '@vicons/utils'
+    import { defineComponent, ref } from "vue"
+    import { useMessage } from "naive-ui"
+
     export default defineComponent({
     setup() {
         const formRef = ref(null);
@@ -49,7 +50,11 @@
             },
         ]
         };
-    }
+    },
+    components: {
+            Icon, 
+            SearchOutline
+        },
     });
 </script>
 
@@ -77,11 +82,9 @@
                                 <n-input round v-model:value="formValue.search.area" placeholder="Tutta Italia" />
                             </n-form-item>
                             <n-button round size="large" type="info" @click="handleValidateClick">
-                                <template #icon>
-                                    <Icon size="30" color="#FFFFFF">
-                                        <SearchOutline />
-                                    </Icon>
-                                </template>
+                                <Icon size="30" color="#FFFFFF">
+                                    <SearchOutline />
+                                </Icon>
                                 Cerca
                             </n-button>
                         </n-form>
