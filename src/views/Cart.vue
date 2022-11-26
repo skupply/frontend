@@ -128,11 +128,12 @@ export default{
 <template>
 <!--gli articoli del carrello vengono mostrati una volta che viene
 effettuato il fetch-->
-<div v-if="!isFetching">
+<div v-if="isFetching"></div>
+<div v-else>
     <!--carrello vuoto-->
     <div v-if="Object.keys(articoli.cart).length === 0">
         <n-space vertical justify="center" size="large" align="center" style="min-height: calc(100vh - 64px); row-gap: 33px;">
-            <img src="../images/EmptyCart.png" class="cartEmptyImage">
+            <img src="../images/EmptyCart.png" class="cartImage">
             <n-space vertical jsutify="center" align="center" style="row-gap: 12px">
                 <span class="t-h3" style="color: #44355B">Sembra che il carrello sia vuoto</span>
                 <span class="t-normal">Scopri subito tutti i nostri prodotti nella sezione marketplace!</span>
@@ -143,16 +144,18 @@ effettuato il fetch-->
 
     <!--carrello con all'interno degli articoli-->
     <div v-else>
-        <div v-for="articolo in articoli.cart">
-            <!--per accedere agli attributi dell'articolo viene usato l'index of sul cart usando l'id-->
-            <n-space>
-                <span>{{articoli.articles[articoli.cart.indexOf(articolo)].title}}</span>
-                <n-button round type="info" @click="remove(articolo.id)">Elimina</n-button>
-                <n-input-number :default-value="articolo.quantity" v-model:value="articolo.quantity" :validator="checkQuantity" 
-                @update:value="setQuantity(articolo.id, articolo.quantity)" :max="articoli.articles[articoli.cart.indexOf(articolo)].quantity" 
-                clearable/>
-            </n-space>
-        </div>
+        <!--per accedere agli attributi dell'articolo viene usato l'index of sul cart usando l'id-->
+         <n-space vertical size="large" style="min-height: calc(100vh - 64px); row-gap: 44px; padding-top: 40px;">
+            <div v-for="articolo in articoli.cart">
+                <n-card>
+                    <span>{{articoli.articles[articoli.cart.indexOf(articolo)].title}}</span>
+                    <n-button round type="info" @click="remove(articolo.id)">Elimina</n-button>
+                    <n-input-number button-placement="both" :default-value="articolo.quantity" v-model:value="articolo.quantity" :validator="checkQuantity" 
+                    @update:value="setQuantity(articolo.id, articolo.quantity)" :max="articoli.articles[articoli.cart.indexOf(articolo)].quantity" 
+                    clearable/>
+                </n-card>
+            </div>
+        </n-space>    
     </div>
 
 </div>
@@ -160,7 +163,7 @@ effettuato il fetch-->
 
 <style scoped>
 
-.cartEmptyImage{
+.cartImage{
     width: 85%;
     height: 85%;
     padding-bottom: 33px;

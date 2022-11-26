@@ -24,9 +24,9 @@ export default {
   },
   methods:{
     logout(){
+      location.replace("/");
       let user = useUserStore();
       user.reset();
-      location.replace("/");
     }
   },
   components: {
@@ -109,18 +109,20 @@ export default {
       <!--se l'utente è già loggato ovvero, è presente una sessione, sarà presente il link al profilo
       altrimenti un bottone per accedere-->  
       <div v-if="userStore.token">
-        <router-link to="/profile">
-          <n-space align="center" size="small">
-            <Icon size="30" color="#1D1D1D">
-              <User />
-            </Icon><span class="t-medium" style="color:#1D1D1D">Il tuo profilo</span>
-            <n-button type="quaternary" @click="logout">
+        <n-space align="center" size="small">
+          <router-link to="/profile">
+            <n-space align="center" size="small">
               <Icon size="30" color="#1D1D1D">
-                <LogOutOutline />
-              </Icon>
-            </n-button>
-          </n-space>
-        </router-link>
+                <User />
+              </Icon><span class="t-medium" style="color:#1D1D1D">Il tuo profilo</span>
+            </n-space>
+          </router-link>
+          <n-button type="quaternary" @click="logout">
+                <Icon size="30" color="#1D1D1D">
+                  <LogOutOutline />
+                </Icon>
+          </n-button>
+        </n-space>
       </div>
       <div v-else>
         <router-link to="/login">
