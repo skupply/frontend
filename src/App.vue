@@ -121,6 +121,15 @@ body::-webkit-scrollbar {
   color: #44355B;
 }
 
+.t-normal{
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  color: #000000;
+}
+
 .t-normal-bold{
   font-family: 'Roboto';
   font-style: normal;

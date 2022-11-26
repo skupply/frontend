@@ -9,6 +9,7 @@ export default{
     data(){
         return{
             articoli: [],//array contenent gli articoli
+            isFetching: true,
         }
     },
     setup(){
@@ -39,6 +40,7 @@ export default{
                 this.articoli = cart;
             })
 
+            this.isFetching = false;
         },
         async removeItem(id){
 
@@ -76,7 +78,9 @@ export default{
                     
                     if(index > -1){
                         //eliminazione elemento
+                        //in quanto gli array cart e articles sono paralleli
                         this.articoli.cart.splice(index, 1);
+                        this.articoli.articles.splice(index, 1);
                     }   
                 }
             })
@@ -109,6 +113,9 @@ export default{
         },
         setQuantity(id, q){//funzione per la modifica della quantità del prodotto nel database
             this.updateItemQuantity(id, q);
+        },
+        marketRedirect(){
+            location.replace("/market");
         }
     },
     mounted(){//al caricamento della pagina eseguo la funzione
@@ -121,25 +128,42 @@ export default{
 <template>
 <!--gli articoli del carrello vengono mostrati una volta che viene
 effettuato il fetch-->
-<p v-if="!articoli">Loading..</p>
-<pre v-else>
-<div v-for="articolo in articoli.cart">
-    <n-space>
-        <span>id item: {{articolo.id}} pz: {{articolo.quantity}}</span>
-        <n-button round type="info" @click="remove(articolo.id)">Elimina</n-button>
-        <n-input-number :default-value="articolo.quantity" v-model:value="articolo.quantity" :validator="checkQuantity" @update:value="setQuantity(articolo.id, articolo.quantity)" clearable/>
-        <br/>
-    </n-space>
+<div v-if="!isFetching">
+    <!--carrello vuoto-->
+    <div v-if="Object.keys(articoli.cart).length === 0">
+        <n-space vertical justify="center" size="large" align="center" style="min-height: calc(100vh - 64px); row-gap: 33px;">
+            <img src="../images/EmptyCart.png" class="cartEmptyImage">
+            <n-space vertical jsutify="center" align="center" style="row-gap: 12px">
+                <span class="t-h3" style="color: #44355B">Sembra che il carrello sia vuoto</span>
+                <span class="t-normal">Scopri subito tutti i nostri prodotti nella sezione marketplace!</span>
+            </n-space>
+            <n-button round size="large" type="primary" block @click="marketRedirect()">Visita il negozio</n-button>
+        </n-space>
+    </div>
+
+    <!--carrello con all'interno degli articoli-->
+    <div v-else>
+        <div v-for="articolo in articoli.cart">
+            <!--per accedere agli attributi dell'articolo viene usato l'index of sul cart usando l'id-->
+            <n-space>
+                <span>{{articoli.articles[articoli.cart.indexOf(articolo)].title}}</span>
+                <n-button round type="info" @click="remove(articolo.id)">Elimina</n-button>
+                <n-input-number :default-value="articolo.quantity" v-model:value="articolo.quantity" :validator="checkQuantity" 
+                @update:value="setQuantity(articolo.id, articolo.quantity)" :max="articoli.articles[articoli.cart.indexOf(articolo)].quantity" 
+                clearable/>
+            </n-space>
+        </div>
+    </div>
+
 </div>
-
-<div v-for="articolo in articoli.articles">
-    <span>{{articolo.title}}</span>
-</div>
-
-
-</pre>
-
 </template>
 
 <style scoped>
+
+.cartEmptyImage{
+    width: 85%;
+    height: 85%;
+    padding-bottom: 33px;
+}
+
 </style>
