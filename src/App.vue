@@ -65,15 +65,6 @@ body::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
 }
 
-.t-h1{
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 56px;
-  line-height: 62px;
-  color: #44355B;
-}
-
 .t-large{
   font-family: 'Roboto';
   font-style: normal;
@@ -92,14 +83,13 @@ body::-webkit-scrollbar {
   color: #1D1D1D;
 }
 
-.t-h3{
+.t-h1{
   font-family: 'Quicksand';
   font-style: normal;
   font-weight: 700;
-  font-size: 40px;
-  line-height: 44px;
-  text-align: center;
-  color: #FEFEFE;
+  font-size: 56px;
+  line-height: 62px;
+  color: #44355B;
 }
 
 .t-h2{
@@ -110,6 +100,26 @@ body::-webkit-scrollbar {
   line-height:52.3px;
   text-align: center;
   color: #FEFEFE;
+}
+
+.t-h3{
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 44px;
+  text-align: center;
+  color: #FEFEFE;
+}
+
+.t-h4{
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 35px;
+  text-align: center;
+  color: #44355B;
 }
 
 .t-h5{
