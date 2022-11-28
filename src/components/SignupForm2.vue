@@ -12,7 +12,27 @@ import { useServerStore } from '../stores/server'
 
 let message = null
 const signupForm = ref(null)
-const signupModel = ref({ sell: false, address: '', phone: '', terms: false })
+const signupModel = ref({ sell: false, address: '', prefix: '', phone: '', terms: false })
+
+const prefixes = [ // Prefissi telefonici in europa
+  {label: '+39', value: '39'}, {label: '+7', value: '7'}, {label: '+30', value: '30'},
+  {label: '+31', value: '31'}, {label: '+32', value: '32'}, {label: '+33', value: '33'},
+  {label: '+34', value: '34'}, {label: '+36', value: '36'}, {label: '+40', value: '40'},
+  {label: '+41', value: '41'}, {label: '+43', value: '43'}, {label: '+44', value: '44'},
+  {label: '+45', value: '45'}, {label: '+46', value: '46'}, {label: '+47', value: '47'},
+  {label: '+48', value: '48'}, {label: '+49', value: '49'}, {label: '+90', value: '90'},
+  {label: '+298', value: '298'}, {label: '+350', value: '350'}, {label: '+351', value: '351'},
+  {label: '+352', value: '352'}, {label: '+353', value: '353'}, {label: '+354', value: '354'},
+  {label: '+355', value: '355'}, {label: '+356', value: '356'}, {label: '+357', value: '357'},
+  {label: '+358', value: '358'}, {label: '+359', value: '359'}, {label: '+370', value: '370'},
+  {label: '+371', value: '371'}, {label: '+372', value: '372'}, {label: '+373', value: '373'},
+  {label: '+374', value: '374'}, {label: '+375', value: '375'}, {label: '+376', value: '376'},
+  {label: '+377', value: '377'}, {label: '+378', value: '378'}, {label: '+380', value: '380'},
+  {label: '+381', value: '381'}, {label: '+382', value: '382'}, {label: '+383', value: '383'},
+  {label: '+385', value: '385'}, {label: '+386', value: '386'}, {label: '+387', value: '387'},
+  {label: '+389', value: '389'}, {label: '+420', value: '420'}, {label: '+421', value: '421'},
+  {label: '+423', value: '423'}, {label: '+995', value: '995'},
+]
 
 function styleAutocomplete(value) {
   const address = document.querySelector('.geoapify-autocomplete-input')
@@ -65,13 +85,25 @@ const signupRules = {
     },
     trigger: ['input', 'blur']
   },
+  prefix: {
+    required: true,
+    validator(rule, value) {
+      if (!signupForm.value.model.sell) return true
+
+      if (!prefixes.some(prefix => prefix.value == value))
+        return new Error('Prefisso non valido')
+
+      return true
+    },
+    trigger: 'change'
+  },
   phone: {
     required: true,
     validator(rule, value) {
       if (!signupForm.value.model.sell) return true
 
       if (value.length != 10)
-        return new Error('Il numero di telefono deve essere lungo 10 cifre')
+        return new Error('Il numero di telefono deve contenere 10 cifre')
 
       return true
     },
@@ -93,6 +125,7 @@ export default {
   data() {
     const color = '#000000A0'
     return {
+      prefixes,
       disabled: false,
       textStyle: { color: color, fontSize: '0.85rem' },
       linkStyle: { color: theme.Typography.pTextColor }
@@ -134,7 +167,7 @@ export default {
         if (error) { message.error('Campi non validi'); return true }
         const sell = this.signupModel.sell
         const address = sell ? this.signupModel.address : null
-        const phone = sell ? this.signupModel.phone : null
+        const phone = sell ? (this.signupModel.prefix + ' ' + this.signupModel.phone) : null
         const terms = this.signupModel.terms
 
         this.disabled = true
@@ -173,9 +206,14 @@ export default {
         <n-form-item path="address" label="Indirizzo">
           <div ref="address" class="autocomplete-container"></div>
         </n-form-item>
-        <n-form-item path="phone" label="Telefono">
-          <n-input :disabled="!signupModel.sell" v-model:value="signupModel.phone" round :allow-input="onlyNumber"/>
-        </n-form-item>
+        <n-space style="flex-wrap: nowrap;" block>
+          <n-form-item path="prefix" label="Prefisso">
+            <n-select :disabled="!signupModel.sell" v-model:value="signupModel.prefix" :options="prefixes" style="min-width: 80px;"/>
+          </n-form-item>
+          <n-form-item path="phone" label="Telefono">
+            <n-input :disabled="!signupModel.sell" v-model:value="signupModel.phone" round :allow-input="onlyNumber"/>
+          </n-form-item>
+        </n-space>
         <n-p :style="textStyle">Sei indeciso? Nessun problema, potrai completare il tuo profilo e diventare venditore anche in un secondo momento</n-p>
         <n-form-item path="terms" :show-label="false">
           <n-checkbox v-model:checked="signupModel.terms">Accetto <a href="/terms" target="_blank" :style="linkStyle">termini e condizioni d'uso</a></n-checkbox>
@@ -194,7 +232,7 @@ export default {
 
 .geoapify-autocomplete-input {
   padding: 0 12px 0 12px;
-  width: calc(100% - 45px);
+  width: calc(100% - var(--n-padding-left));
   flex-basis: 100%;
   height: 32px;
   font-size: 14px;
