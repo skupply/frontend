@@ -77,6 +77,6 @@ export default {
 }
 
 .card {
-  width: calc(15vw + 200px);
+  width: calc(15vw + 150px);
 }
 </style>

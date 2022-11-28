@@ -58,6 +58,18 @@ export default {
     ProductCard,
     TrashOutline
   },
+  computed: {
+    fullPrice() {
+      return this.items.reduce((sum, item) => {
+        return sum + item.price * item.selected + (item.selected ? item.shipping : 0)
+      }, 0)
+    },
+    shippingPrice() {
+      return this.items.reduce((sum, item) => {
+        return sum + (item.selected ? item.shipping : 0)
+      }, 0)
+    }
+  },
   methods: {
     async removeItem(productId) {
       const user = useUserStore()
@@ -96,6 +108,7 @@ export default {
         :shipping="item.shipping"
         :location="item.location"
         :image="item.image"
+        style="width: calc(20vw + 400px);"
       >
         <n-space size="large" align="center" style="flex-wrap: nowrap;">
           <n-input-number
@@ -114,13 +127,9 @@ export default {
 
     <n-space vertical>
       <n-h3>Totale ordine</n-h3>
-      <n-h2 :style="priceStyle">€ {{items.reduce((sum, item) => {
-        return sum + item.price * item.selected + (item.selected ? item.shipping : 0)
-      }, 0).toFixed(2)}}</n-h2>
-      <n-text :style="{ fontWeight: 600, color: smallLabel }">di cui € {{items.reduce((sum, item) => {
-        return sum + (item.selected ? item.shipping : 0)
-      }, 0).toFixed(2)}} di spedizione</n-text>
-      <n-button round block size="large" type="primary" style="margin-top: 25px;">Procedi al checkout</n-button>
+      <n-h2 :style="priceStyle">€ {{fullPrice.toFixed(2)}}</n-h2>
+      <n-text :style="{ fontWeight: 600, color: smallLabel }">di cui € {{shippingPrice.toFixed(2)}} di spedizione</n-text>
+      <n-button :disabled="fullPrice == 0" round block size="large" type="primary" style="margin-top: 25px;">Procedi al checkout</n-button>
     </n-space>
 
   </n-space>

@@ -19,7 +19,7 @@ const checkAuthentication = (to, from, next) => {
     const userStore = useUserStore();
     if (userStore.token) return next()
 
-    next({ path: '/login', query: { redirect: to.path } })
+    next({ path: '/login', query: { redirect: to.fullPath } })
 }
 
 const routes = [

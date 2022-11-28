@@ -33,7 +33,7 @@ export default {
 </script>
 
 <template>
-  <n-card style="width: calc(30vw + 300px); filter: drop-shadow(0 4px 8px #00000010);">
+  <n-card style="filter: drop-shadow(0 4px 8px #00000010);">
     <n-space size="large" justify="space-between" align="center" style="height: 100px; flex-wrap: nowrap;">
       <n-space style="flex-wrap: nowrap;">
         <img v-if="image" class="image" :src="image" :alt="title"/>

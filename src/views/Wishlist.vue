@@ -128,6 +128,7 @@ export default {
       :shipping="item.shipping"
       :location="item.location"
       :image="item.image"
+      style="width: calc(15vw + 500px);"
     >
       <n-space size="large" align="center" style="flex-wrap: nowrap;">
         <n-button v-if="item.cart" round size="large" type="primary" @click="item.cart ? addToCart(item.id) : null">Aggiungi al carrello</n-button>
@@ -139,7 +140,7 @@ export default {
   </n-space>
   <n-space v-else class="container" justify="space-evenly" align="center">
     <n-space vertical size="large" justify="center" align="center">
-      <EmptyWishlist size="400"/>
+      <EmptyWishlist size="350"/>
       <n-space vertical style="margin: 25px 0;">
         <n-h3 style="line-height: 2rem;">Sembra che la tua wishlist sia vuota</n-h3>
         <n-p>Scopri subito tutti i nostri prodotti nella sezione marketplace!</n-p>
