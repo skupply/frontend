@@ -75,7 +75,7 @@ export default {
         const category = this.searchModel.category
         const location = this.searchModel.location
 
-        const url = `search/?query=${query}`
+        let url = `search/?query=${query}`
         if (categery) url += `&category=${category}`
         if (location) url += `&location=${location}`
 
