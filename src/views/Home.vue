@@ -1,120 +1,109 @@
 <script>
+// Packages imports
+import { markRaw } from 'vue'
 
+// Files imports 
+import theme from '../assets/theme'
+
+// Components imports
+import HomeCard from '../components/HomeCard.vue'
+import HomeBook from '../components/images/HomeBook.vue'
+import HomeDashboard from '../components/images/HomeDashboard.vue'
+import HomeHandshake from '../components/images/HomeHandshake.vue'
+import HomeShopping from '../components/images/HomeShopping.vue'
+
+export default {
+  data() {
+    return {
+      color: theme.Typography.pTextColor,
+      decorationStyle: { backgroundColor: theme.common.primaryColor },
+      hStyle: { lineHeight: '2rem', color: theme.common.foreground },
+      pStyle: { marginBottom: '2rem', color: theme.common.foreground },
+      cards: [
+        {
+          title: 'Cerca, trova e risparmia!',
+          text: [ "Si sta avvicinando l'inizio dell'anno scolastico e la lista della spesa è lunga?", "Entra in Skupply e risparmia cercando tra centinaia di prodotti di seconda mano." ],
+          image: HomeShopping
+        },
+        {
+          title: 'Guadagna da ciò che non usi più!',
+          text: [ "Quante volte hai comprato del materiale per utilizzarlo un paio di volte e dimenticarlo nel cassetto?", "È ora di dargli nuova vita e di guadagnarci qualcosina." ],
+          image: HomeHandshake
+        },
+        {
+          title: 'Semplice, veloce e sicuro!',
+          text: [ "Sfoglia il negozio, contatta i venditori, riempi il carrello e ricevi comodamente a casa", "Entra in Skupply e risparmia cercando tra centinaia di prodotti di seconda mano." ],
+          image: HomeDashboard
+        }
+      ]
+    }
+  },
+  components: {
+    HomeCard,
+    HomeBook,
+    HomeDashboard: markRaw(HomeDashboard),
+    HomeHandshake: markRaw(HomeHandshake),
+    HomeShopping: markRaw(HomeShopping)
+  }
+}
 </script>
 
 <template>
-  <!--sezione sotto navigation bar-->
-  <n-space style="padding: 128px 0px 128px 0px" justify="space-evenly" size="large">
-    <n-space vertical size="large">
-      <span class="t-h1">La scuola a misura<br/>di portafoglio</span>
-      <span class="t-large">Visita il nostro marketplace dove moltissimi<br/>
-          studenti comprano e vendono ma soprattutto<br/>
-          risparmiano su centinaia di prodotti scolastici.</span>
-      <n-button round size="large" type="info">Visita il negozio</n-button>
+  <n-space class="container" justify="space-evenly" style="flex-wrap: nowrap;">
+    <n-space vertical size="large" style="width: 35vw;">
+      <n-h1 style="line-height: 4rem;">La scuola a misura di portafoglio</n-h1>
+      <n-p>Visita il nostro marketplace dove moltissimi studenti comprano, vendono ma soprattutto risparmiano su centinaia di prodotti scolastici.</n-p>
+      <n-button round size="large" type="info" @click="this.$router.push('/market')" style="margin-top: 10px;">Visita il negozio</n-button>
     </n-space>
-
-    <n-space justify="end" size="large">
-      <img src="../images/Landing.png" class="landingImage">
-    </n-space>
+    <HomeBook size="400"/>
   </n-space>
 
-  <!--sezione centrale pagina-->
-
-  <div class="centerDiv">
-    <n-space vertical justify="center" align="center">
-
-      <n-space vertical size="large" align="center" style="padding-bottom: 7vh">
-        <span class="t-h3">Come funziona?</span>
-        <span class="t-medium">Su Skupply tutto è semplice. Scopri come sfruttare al meglio la piattaforma! </span>
-      </n-space>
-
-      <!--cards-->
-      <n-grid :cols="5" :y-gap="30">
-        <!--card1-->
-        <n-grid-item :offset="1" style="width:60vw;" span="4">
-          <n-card>
-            <n-layout size="large">
-              <n-layout has-sider>
-                <n-layout-sider width=400 style="margin-left:2vw">
-                  <span class="t-large-bold">Cerca, trova e risparmia!</span><br/><br/>
-                  <span class="t-medium" style="color: #000000">Si sta avvicinando l’inizio dell’anno scolastico e la lista della spesa è lunga?
-                  <br/>Entra in Skupply e risparmia cercando tra centinaia di prodotti di seconda mano.</span>
-                </n-layout-sider>
-                <n-layout-content align="end" style="padding-right: 2vw">
-                  <img src="../images/HomeCard1.png" style="max-width:auto; max-height:auto">  
-                </n-layout-content>
-              </n-layout>
-            </n-layout>
-            </n-card>
-        </n-grid-item>
-
-        <!--card2-->
-        <n-grid-item :offset="1" style="width:60vw">
-          <n-card>
-            <n-layout size="large">
-              <n-layout has-sider>
-                <n-layout-content style="margin-left:2vw">
-                  <img src="../images/HomeCard2.png" style="max-width:auto; max-height:auto">  
-                </n-layout-content>
-                <n-layout-sider width=350 style="margin-right:2vw">
-                  <span class="t-large-bold">Guadagna da ciò che non usi più!</span><br/><br/>
-                  <span class="t-medium" style="color: #000000">Quante volte hai comprato del materiale per utilizzarlo un paio di volte e dimenticarlo nel cassetto?
-                    <br/>È ora di dargli nuova vita e di guadagnarci qualcosina.</span>
-                </n-layout-sider>
-              </n-layout>
-            </n-layout>
-            </n-card>
-        </n-grid-item>
-
-        <!--card3-->
-        <n-grid-item :offset="1" style="width:60vw" span="3">
-          <n-card>
-            <n-layout size="large">
-              <n-layout has-sider>
-                <n-layout-sider width=370 style="margin-left:2vw">
-                  <span class="t-large-bold">Semplice, veloce e sicuro!</span><br/><br/>
-                  <span class="t-medium" style="color: #000000">Sfoglia il negozio, contatta i venditori, riempi il carrello e ricevi comodamente a casa.
-                    <br/>Se qualcosa non dovesse andare per il meglio saremo lieti di occuparcene.</span>
-                </n-layout-sider>
-                <n-layout-content align="end" style="padding-right: 2vw">
-                  <img src="../images/HomeCard3.png" style="max-width:auto; max-height:auto">  
-                </n-layout-content>
-              </n-layout>
-            </n-layout>
-            </n-card>
-        </n-grid-item>
-      </n-grid>  
+  <n-space class="container decoration" vertical size="large" align="center" :style="decorationStyle">
+    <n-space vertical align="center">
+      <n-h3 :style="hStyle">Come funziona?</n-h3>
+      <n-p :style="pStyle">Su Skupply tutto è più semplice. Scopri come sfruttare al meglio la piattaforma!</n-p>
     </n-space>
-  </div>
+    <HomeCard v-for="(item, index) in cards" image width="60vw" height="250px" :alignment="index">
+      <template v-slot:title><n-p class="title" :style="{ color: color }">{{item.title}}</n-p></template>
+      <template v-slot:text><n-p v-for="phrase in item.text" class="text">{{phrase}}</n-p></template>
+      <template v-slot:image><component :is="item.image" size="200"/></template>
+    </HomeCard>
+  </n-space>
 
-  <!--sezione che sta tra la parte centrale e il footer della pagina-->
-  <n-space style="padding: 100px 0px 100px 0px" justify="space-evenly" size="large" align="center">
+  <n-space class="container" justify="space-evenly" align="center">
     <n-space vertical>
-      <span class="t-h1">Pronto per iniziare?</span>
-      <span class="t-large">Sfoglia gli annunci o creane uno</span>
+      <n-h1 style="line-height: 4rem;">Pronto per iniziare?</n-h1>
+      <n-p>Sfoglia gli annunci o creane uno</n-p>
     </n-space>
-
-    <n-space justify="space-between" size="large">
-      <n-button round size="large" type="info" block>Visita il negozio</n-button>
-      <n-button round size="large" type="primary" block>Inizia a vendere</n-button>
+    <n-space size="large">
+      <n-button round size="large" type="info" @click="this.$router.push('/market')">Visita il negozio</n-button>
+      <n-button round size="large" type="primary" @click="this.$router.push('/sell')">Inizia a vendere</n-button>
     </n-space>
   </n-space>
 </template>
 
 <style scoped>
- .landingImage{
-  height: auto;
-  width: auto;
-}
-.centerDiv{
-  background: #44355B;
-  box-shadow: 0px -4px 24px rgba(63, 61, 86, 0.2);
-  align-items: baseline;
-  padding-bottom: 16vh;
-  padding-top: 16vh;
-  background-image: url("../images/Vectors.png");
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+.container {
+  padding: 100px calc(15vw - 100px);
+  box-sizing: border-box;
 }
 
+.decoration {
+  flex-wrap: nowrap;
+  background-size: 100% 100%;
+  background-image: url("../assets/images/Decoration.svg");
+}
+
+.card {
+  width: 60vw;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.text {
+  font-size: 1.1rem;
+}
 </style>

@@ -1,12 +1,20 @@
+// Packages imports
+import naive from 'naive-ui'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import naive from 'naive-ui'
 
-import App from './App.vue'
+// Files imports 
 import router from './router/index.js'
 
+// Components imports
+import App from './App.vue'
+
+// Styles imports
+import './assets/main.css'
+
 const app = createApp(App)
-app.use(createPinia())
+const pinia = createPinia()
+app.use(pinia)
 app.use(router)
 app.use(naive)
 

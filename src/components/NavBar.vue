@@ -1,144 +1,62 @@
 <script>
-
-import Wordmark from './icons/Wordmark.vue'
-import { Box16Regular } from '@vicons/fluent'
-import { User } from '@vicons/carbon'
-import { BagHandleOutline, ChatbubblesOutline, HeartOutline, CartOutline, LogOutOutline } from '@vicons/ionicons5'
-import { Icon } from '@vicons/utils'
+// States imports
 import { useUserStore } from '../stores/user'
 
+// Components imports
+import NavLink from './NavLink.vue'
+import Skupply from './icons/Skupply.vue'
+import { User } from '@vicons/carbon'
+import { Box16Regular } from '@vicons/fluent'
+import { BagHandleOutline, CartOutline, ChatbubblesOutline, HeartOutline } from '@vicons/ionicons5'
+
+const theme = {
+  Button: {
+    fontWeight: '600',
+    fontSizeLarge: '16px',
+    paddingRoundLarge: '0 40px',
+    borderPrimary: '2px solid #44355B'
+  }
+}
+
 export default {
-  data(){
-    return {
-      color: "#1D1D1D",
-      theme:{
-        Button: {
-            paddingRoundLarge: "10px 40px",
-            borderPrimary: "2px solid"
-          },
-          Space: {
-            gapLarge: "8px 50px"
-          }
-      },
-    }
-  },
-  methods:{
-    logout(){
-      location.replace("/");
-      let user = useUserStore();
-      user.reset();
-    }
+  data() {
+    const user = useUserStore()
+
+    return { user, theme }
   },
   components: {
-    Wordmark,
-    Icon,
-    Box16Regular,
     BagHandleOutline,
+    Box16Regular,
+    CartOutline,
     ChatbubblesOutline,
     HeartOutline,
-    CartOutline,
-    LogOutOutline,
+    NavLink,
+    Skupply,
     User
-  },
-  setup () {
-    const userStore = useUserStore();
-    const test = () => {
-      console.log(userStore.token);
-    }
-    return {
-      test,
-      userStore,
-      Wordmark
-    }
-  },
+  }
 }
 </script>
 
 <template>
   <n-config-provider :theme-overrides="theme">
-    <n-space justify="space-evenly" class="background" style="height: 64px; align-items: center;">
-        <!--sezione link-->
-        <router-link to="/">
-          <Wordmark width="100px" height="50px" />
-        </router-link>
-      
-        <n-space justify="space-between" size="large">
+    <n-space justify="space-between" align="center" style="height: 64px; padding: 0 calc(20vw - 150px); flex-wrap: nowrap;">
+      <router-link to="/" style="display: flex">
+        <Skupply size="100" style="margin-top: 7.5px"/>
+      </router-link>
 
-          <router-link to="/market">
-            <n-space align="center" size="small">
-              <Icon size="30" :color="color">
-                <BagHandleOutline />
-              </Icon>
-              <span class="t-medium" :style="`color: ${color};`">Negozio</span>
-            </n-space>
-          </router-link>
-          <router-link to="/sell">
-            <n-space align="center" size="small">
-              <Icon size="30" :color="color">
-                <Box16Regular />
-              </Icon>
-              <span class="t-medium" :style="`color: ${color};`">Vendi</span>
-            </n-space>
-          </router-link>
-          <router-link to="/chat">
-            <n-space align="center" size="small">
-              <Icon size="30" :color="color">
-                <ChatbubblesOutline />
-              </Icon>
-              <span class="t-medium" :style="`color: ${color};`">Messaggi</span>
-            </n-space>
-          </router-link>
-          <router-link to="/wishlish">
-            <n-space align="center" size="small">
-              <Icon size="30" :color="color">
-                <HeartOutline />
-              </Icon>
-              <span class="t-medium" :style="`color: ${color};`">Wishlist</span>
-            </n-space>
-          </router-link>
-          <router-link to="/cart">
-            <n-space align="center" size="small">
-              <Icon size="30" :color="color">
-                <CartOutline />
-              </Icon>
-              <span class="t-medium" :style="`color: ${color};`">Carrello</span>
-            </n-space>
-          </router-link>
-        </n-space>
-      
-      <!--se l'utente è già loggato ovvero, è presente una sessione, sarà presente il link al profilo
-      altrimenti un bottone per accedere-->  
-      <div v-if="userStore.token">
-        <n-space align="center" size="small">
-          <router-link to="/profile">
-            <n-space align="center" size="small">
-              <Icon size="30" color="#1D1D1D">
-                <User />
-              </Icon><span class="t-medium" style="color:#1D1D1D">Il tuo profilo</span>
-            </n-space>
-          </router-link>
-          <n-button type="quaternary" @click="logout">
-                <Icon size="30" color="#1D1D1D">
-                  <LogOutOutline />
-                </Icon>
-          </n-button>
-        </n-space>
-      </div>
-      <div v-else>
-        <router-link to="/login">
-          <n-button round ghost size="large" type="primary"><span class="t-normal-bold">Accedi</span></n-button>
-        </router-link>
-      </div>
+      <n-space justify="center" size="large" style="flex-wrap: nowrap;">
+        <NavLink link="/market" label="Negozio"><BagHandleOutline/></NavLink>
+        <NavLink link="/sell" label="Vendi"><Box16Regular/></NavLink>
+        <NavLink link="/chat" label="Messaggi"><ChatbubblesOutline/></NavLink>
+        <NavLink link="/wishlist" label="Wishlist"><HeartOutline/></NavLink>
+        <NavLink link="/cart" label="Carrello"><CartOutline/></NavLink>
+      </n-space>
+
+      <NavLink v-if="user.token" link="/profile" label="Profilo"><User/></NavLink>
+      <n-button v-else ghost round type="primary" size="large" @click="this.$router.push('/login')">Accedi</n-button>
     </n-space>
   </n-config-provider>
 </template>
 
 <style scoped>
-.background{
-  background-color: #FEFEFE;
-}
-
-a:link {
-  text-decoration: none;
-}
 </style>
