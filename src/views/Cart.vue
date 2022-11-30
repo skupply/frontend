@@ -17,8 +17,9 @@ async function getCartItems() {
   const server = useServerStore()
 
   const options = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-access-token': user.token },
+    body: JSON.stringify({email: user.data.email})
   }
 
   /* Backend refactoring required
@@ -29,21 +30,18 @@ async function getCartItems() {
     })
   */
 
-  const result = { code: 0x0500, message: 'Cart retrieved successfully', cart: [
-    { id: '01234', title: 'Matita', quantity: 20, selected: 10, price: 1.00, shipping: 0.25, location: 'Trento TN', image: 'https://www.leuchtturm1917.com/media/productdetail/700x700/801153/pencil.jpg' },
-    { id: '56789', title: 'Gomma', quantity: 10, selected: 5, price: 2.00, shipping: 0.40, location: 'Belluno BL', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJLMnLwC4xPqMvjU8udGLs9EIbPKgWbNO17g&usqp=CAU' }
-  ]}
-
-  return result
+  const result = await fetch(`${server.cartEndpoint}`, options).then(response => response.json());
+  return result;
 }
 
 export default {
   data() {
     const smallLabel = '#00000060'
-
+    
     return {
       theme,
-      items: [],
+      items: [],//array contenente il modello degli articoli
+      itemsIds: [],//array contenente una coppia id_articolo e quantità
       smallLabel,
       priceStyle: { lineHeight: '2rem', color: theme.common.infoColor }
     }
@@ -51,6 +49,7 @@ export default {
   async mounted() {
     const response = await getCartItems()
     this.items = response.cart
+    this.itemsIds = response.cart_ids
   },
   components: {
     EmptyCart,
@@ -61,16 +60,17 @@ export default {
   computed: {
     fullPrice() {
       return this.items.reduce((sum, item) => {
-        return sum + item.price * item.selected + (item.selected ? item.shipping : 0)
+        return sum + parseFloat(item.price['$numberDecimal']) * this.itemsIds[this.items.indexOf(item)].quantity + (item.selected ? parseFloat(item.shipmentPrice['$numberDecimal']) : 0)
       }, 0)
     },
     shippingPrice() {
       return this.items.reduce((sum, item) => {
-        return sum + (item.selected ? item.shipping : 0)
+        return sum + (item.selected ? parseFloat(item.shipmentPrice['$numberDecimal']) : 0)
       }, 0)
     }
   },
   methods: {
+    //rimozione elemento dal carrello
     async removeItem(productId) {
       const user = useUserStore()
       const server = useServerStore()
@@ -91,7 +91,51 @@ export default {
       const result = { code: 0x0300, message: 'Item removed successfully' }
 
       if (result) this.items = this.items.filter(item => item.id != productId)
-    }
+    },
+    //aggiornamento quantità elemento carrello
+    async updateItemQuantity(productId, quantity){
+      const user = useUserStore()
+      const server = useServerStore()
+
+      const requestOptions = {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'x-access-token': user.token },
+          body: JSON.stringify({
+              email: user.data.email,
+              id: productId,
+              quantity: quantity
+          })
+      };
+
+      const result = await fetch(`${server.cartEndpoint}`, requestOptions)
+      .then(response => {
+          response.json();
+      })
+    },
+    async removeItem(productId){
+      const user = useUserStore()
+      const server = useServerStore()
+
+      const requestOptions = {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json', 'x-access-token': user.token },
+          body: JSON.stringify({
+              email: user.data.email,
+              id: productId
+          })
+      };
+
+      const result = await fetch(`${server.cartEndpoint}`, requestOptions)
+      .then(response => {
+          response.json();
+          if(response.status == 200){
+            //se la risposta ha esito positivo, elimino dagli array items e itemsIds il prodotto corispondente
+            this.items = this.items.filter(item => item._id != productId);
+            this.itemsIds = this.itemsIds.filter(itemId => itemId._id != productId);
+          }
+      })
+   }
+
   }
 }
 </script>
@@ -100,13 +144,13 @@ export default {
   <n-space v-if="items.length" class="container" justify="space-evenly">
     <n-space vertical size="large">
       <ProductCard v-for="item in items"
-        :id="item.id"
+        :id="item._id"
         :title="item.title"
         :quantity="item.quantity"
         :selected="item.selected"
-        :price="item.price"
-        :shipping="item.shipping"
-        :location="item.location"
+        :price="parseFloat(item.price['$numberDecimal'])"
+        :shipping="parseFloat(item.shipmentPrice['$numberDecimal'])"
+        :location="(item.handDeliverZone ? item.handDeliverZone : '')"
         :image="item.image"
         style="width: calc(20vw + 400px);"
       >
@@ -115,10 +159,11 @@ export default {
             style="width: 100px;"
             button-placement="both"
             min="0" :max="item.quantity"
-            v-model:value="item.selected"
-            :default-value="item.selected"
-          />
-          <n-button round type="info" style="width: 40px; height: 40px; padding: 0;" @click="removeItem(item.id)">
+            v-model:value="itemsIds[items.indexOf(item)].quantity"
+            :default-value="itemsIds[items.indexOf(item)].quantity"
+            @update:value="updateItemQuantity(item._id, itemsIds[items.indexOf(item)].quantity)"
+          /><!--per la quantità, si fa accesso all'array itemsIds-->
+          <n-button round type="info" style="width: 40px; height: 40px; padding: 0;" @click="removeItem(item._id)">
             <Icon size="20" :color="theme.common.foreground"><TrashOutline/></Icon>
           </n-button>
         </n-space>
@@ -147,7 +192,8 @@ export default {
 
 <style scoped>
 .container {
-  height: calc(100vh - 64px);
+  min-height: calc(100vh - 64px);
+  row-gap: 33px;
   padding: 50px calc(25vw - 200px);
   box-sizing: border-box;
 }

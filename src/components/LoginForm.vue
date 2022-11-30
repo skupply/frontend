@@ -16,18 +16,14 @@ async function requestLogin({ email, password }) {
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password })
+    body: JSON.stringify({email: email, password: password})
   }
 
-  /* Backend refactoring required
   const result = await fetch(server.loginEndpoint, options)
     .then(response => {
-      if (response.status != 200) return null
       return response.json()
     })
-  */
-  const result = { code: 0x0300, message: 'Logged successfully', firstname: 'Mario', lastname: 'Rossi', username: 'Mario', email: 'skupply.shop@gmail.com', token: '0123456789abcdef' }
-  
+
   return result
 }
 
@@ -103,9 +99,9 @@ export default {
 
         const response = await requestLogin({ email: this.loginModel.email, password: this.loginModel.password })
 
-        if (response) {
+        if (response.ok == true) {
           const keys = ['firstname', 'lastname', 'username', 'email', 'token']
-
+    
           if (keys.every(key => response[key])) {
             const user = useUserStore()
 

@@ -6,7 +6,8 @@ export const useServerStore = defineStore('server', {
     return {
       emailEndpoint: `${address}/email`,
       loginEndpoint: `${address}/login`,
-      userEndpoint: `${address}/user`
+      userEndpoint: `${address}/user`,
+      cartEndpoint: `${address}/cart`,
     };
   }
 })

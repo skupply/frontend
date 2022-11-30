@@ -74,9 +74,15 @@ export default {
 }
 
 .title {
+  max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.5rem;
+  line-height: 1.7rem;
   white-space: nowrap;
 }
+
+a:link{
+ text-decoration: none;
+}
+
 </style>
