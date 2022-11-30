@@ -20,8 +20,9 @@ async function getWishlistItems() {
   const server = useServerStore()
 
   const options = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-access-token': user.token },
+    body: JSON.stringify({email: user.data.email})
   }
 
   /* Backend refactoring required
@@ -32,12 +33,8 @@ async function getWishlistItems() {
     })
   */
 
-  const result = { code: 0x0500, message: 'Wishlist retrieved successfully', wishlist: [
-    { id: '01234', title: 'Matita', cart: false, price: 1.00, shipping: 0.25, location: 'Trento TN', image: 'https://www.leuchtturm1917.com/media/productdetail/700x700/801153/pencil.jpg' },
-    { id: '56789', title: 'Gomma', cart: true, price: 2.00, shipping: 0.40, location: 'Belluno BL', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJLMnLwC4xPqMvjU8udGLs9EIbPKgWbNO17g&usqp=CAU' }
-  ]}
-
-  return result
+  const result = await fetch(`${server.wishlistEndpoint}`, options).then(response => response.json());
+  return result;
 }
 
 export default {
@@ -47,6 +44,7 @@ export default {
     return {
       theme,
       items: [],
+      itemsIds: [],
       smallLabel,
       priceStyle: { lineHeight: '2rem', color: theme.common.infoColor }
     }
@@ -58,7 +56,8 @@ export default {
   },
   async mounted() {
     const response = await getWishlistItems()
-    this.items = response.wishlist
+    this.items = response.wishlist,
+    this.itemsIds = response.wishlist_ids
   },
   components: {
     EmptyWishlist,
@@ -66,15 +65,20 @@ export default {
     Icon,
     ProductCard
   },
+  computed: {
+    async checkIsCart(){
+
+    }
+  },
   methods: {
     async addToCart(productId) {
       const user = useUserStore()
       const server = useServerStore()
 
       const options = {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'x-access-token': user.token },
-        body: JSON.stringify({ productId })
+        body: JSON.stringify({ email: user.data.email, id: productId })
       }
 
       /* Backend refactoring required
@@ -85,33 +89,32 @@ export default {
         })
       */
 
-      const result = { code: 0x0300, message: 'Item added successfully' }
+      const result = await fetch(`${server.cartEndpoint}/add`, options).then(response => response.json());
 
-      if (result) {
-        this.items.forEach(item => { if (item.id == productId) item.cart = false })
-        this.message.success('Prodotto aggiunto al carrello')
-      }
+      return result;
     },
     async removeItem(productId) {
       const user = useUserStore()
       const server = useServerStore()
 
-      const options = {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
-      }
+      const requestOptions = {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json', 'x-access-token': user.token },
+          body: JSON.stringify({
+              email: user.data.email,
+              id: productId
+          })
+      };
 
-      /* Backend refactoring required
-      const result = await fetch(`${server.userEndpoint}/wishlist/?id=${productId}`, options)
-        .then(response => {
-          if (response.status != 200) return
-          return response.json()
-        })
-      */
-
-      const result = { code: 0x0300, message: 'Item removed successfully' }
-
-      if (result) this.items = this.items.filter(item => item.id != productId)
+      const result = await fetch(`${server.wishlistEndpoint}`, requestOptions)
+      .then(response => {
+          response.json();
+          if(response.status == 200){
+            //se la risposta ha esito positivo, elimino dagli array items e itemsIds il prodotto corrispondente
+            this.items = this.items.filter(item => item._id != productId);
+            this.itemsIds = this.itemsIds.filter(itemId => itemId._id != productId);
+          }
+      })
     }
   }
 }
@@ -120,19 +123,19 @@ export default {
 <template>
   <n-space v-if="items.length" vertical class="container" size="large" align="center">
     <ProductCard v-for="item in items"
-      :id="item.id"
+      :id="item._id"
       :title="item.title"
       :quantity="item.quantity"
       :selected="item.selected"
-      :price="item.price"
+      :price="parseFloat(item.price['$numberDecimal'])"
       :shipping="item.shipping"
-      :location="item.location"
+      :location="(item.handDeliverZone ? item.handDeliverZone : '')"
       :image="item.image"
       style="width: calc(15vw + 500px);"
     >
       <n-space size="large" align="center" style="flex-wrap: nowrap;">
-        <n-button v-if="item.cart" round size="large" type="primary" @click="item.cart ? addToCart(item.id) : null">Aggiungi al carrello</n-button>
-        <n-button round type="info" style="width: 40px; height: 40px; padding: 0;" @click="removeItem(item.id)">
+        <n-button v-if="!itemsIds[items.indexOf(item)].isCart" round size="large" type="primary" @click="!itemsIds[items.indexOf(item)].isCart ? addToCart(item._id) : null">Aggiungi al carrello</n-button>
+        <n-button round type="info" style="width: 40px; height: 40px; padding: 0;" @click="removeItem(item._id)">
           <Icon size="20" :color="theme.common.foreground"><Heart24Filled/></Icon>
         </n-button>
       </n-space>

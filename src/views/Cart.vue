@@ -70,28 +70,6 @@ export default {
     }
   },
   methods: {
-    //rimozione elemento dal carrello
-    async removeItem(productId) {
-      const user = useUserStore()
-      const server = useServerStore()
-
-      const options = {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
-      }
-
-      /* Backend refactoring required
-      const result = await fetch(`${server.userEndpoint}/cart/?id=${productId}`, options)
-        .then(response => {
-          if (response.status != 200) return
-          return response.json()
-        })
-      */
-
-      const result = { code: 0x0300, message: 'Item removed successfully' }
-
-      if (result) this.items = this.items.filter(item => item.id != productId)
-    },
     //aggiornamento quantità elemento carrello
     async updateItemQuantity(productId, quantity){
       const user = useUserStore()
@@ -112,6 +90,7 @@ export default {
           response.json();
       })
     },
+    //rimozione elemento dal carrello
     async removeItem(productId){
       const user = useUserStore()
       const server = useServerStore()
@@ -129,7 +108,7 @@ export default {
       .then(response => {
           response.json();
           if(response.status == 200){
-            //se la risposta ha esito positivo, elimino dagli array items e itemsIds il prodotto corispondente
+            //se la risposta ha esito positivo, elimino dagli array items e itemsIds il prodotto corrispondente
             this.items = this.items.filter(item => item._id != productId);
             this.itemsIds = this.itemsIds.filter(itemId => itemId._id != productId);
           }
