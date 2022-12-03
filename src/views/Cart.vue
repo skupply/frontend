@@ -48,9 +48,9 @@ export default {
     
     return {
       theme,
-      items: [],//array contenente il modello degli articoli
-      itemsIds: [],//array contenente una coppia id_articolo e quantità
       smallLabel,
+      items: [], // Array contenente il modello degli articoli
+      itemsIds: [], // Array contenente una coppia id_articolo e quantità
       priceStyle: { lineHeight: '2rem', color: theme.common.infoColor }
     }
   },

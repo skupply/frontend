@@ -17,14 +17,8 @@ async function checkEmail(email) {
     headers: { 'Content-Type': 'application/json' }
   }
 
-  /* Backend refactoring required
   const result = await fetch(`${server.emailEndpoint}/?email=${email}`, options)
-    .then(response => {
-      if (response.status != 200) return null
-      return response.json()
-    })
-  */
-  const result = { code: 0x0200, message: 'Email is reachable' }
+    .then(response => response.json())
   
   return result;
 }
@@ -36,15 +30,9 @@ async function checkUsername(username) {
     headers: { 'Content-Type': 'application/json' }
   }
 
-  /* Backend refactoring required
   const result = await fetch(`${server.userEndpoint}/find/?username=${username}`, options)
-    .then(response => {
-      if (response.status != 200) return null
-      return response.json()
-    })
-  */
-  const result = { code: 0x0100, message: 'User is available' }
-  
+    .then(response => response.json())
+
   return result
 }
 
@@ -129,16 +117,39 @@ export default {
         const emailResponse = await checkEmail(email)
         const usernameResponse = await checkUsername(username)
 
-        if (!emailResponse || !usernameResponse) {
+        let emailResult = false
+        let usernameResult = false
+        switch (emailResponse.code) {
+          case 202:
+            verifing.content = 'Richiesta formattata non correttamente'
+            break
+          case 203:
+            emailResult = true
+            break
+          case 204:
+            verifing.content = 'Questa email non è raggiungibile'
+            break
+          case 205:
+            verifing.content = 'Questa email è già utilizzata'
+            break
+        }
+
+        switch (usernameResponse.code) {
+          case 102:
+            verifing.content = 'Richiesta formattata non correttamente'
+            break
+          case 104:
+            usernameResult = true
+            break
+          case 107:
+            verifing.content = 'Questo username è già in utilizzo'
+            break
+        }
+
+        if (!emailResult || !usernameResult) {
           setTimeout(verifing.destroy, 3000)
           verifing.type = 'error'
-
-          if (!emailResponse)
-            verifing.content = 'Questa email non è raggiungibile'
-          if (!usernameResponse)
-            verifing.content = 'Questo username è già in utilizzo'
-        }
-        else {
+        } else {
           verifing.destroy()
           this.$emit('submit', { firstname, lastname, username, email })
         }
