@@ -41,7 +41,7 @@ export default {
           <Icon size="25" color="#00000040" style="display: flex; align-items: center;"><ImageOutline/></Icon>
         </n-space>
 
-        <n-space vertical justify="space-between" style="margin: 0 25px 0 25px;">
+        <n-space vertical justify="space-between" style="margin: 0 0 0 25px;">
           <n-space vertical>
             <router-link :to="`/product/?id=${id}`">
               <n-h4 class="title">{{title}}</n-h4>
@@ -74,7 +74,7 @@ export default {
 }
 
 .title {
-  max-width: 300px;
+  max-width: calc(15vw + 100px);
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.7rem;

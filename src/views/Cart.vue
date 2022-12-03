@@ -31,6 +31,14 @@ async function getCartItems() {
   */
 
   const result = await fetch(`${server.cartEndpoint}`, options).then(response => response.json());
+
+  // Add server path to images
+  result.cart.forEach(item => {
+    item.photos.forEach(photo => {
+      photo.path = server.productsMedia + '/images/' + photo.path
+    })
+  })
+
   return result;
 }
 
@@ -59,13 +67,13 @@ export default {
   },
   computed: {
     fullPrice() {
-      return this.items.reduce((sum, item) => {
-        return sum + parseFloat(item.price['$numberDecimal']) * this.itemsIds[this.items.indexOf(item)].quantity + (item.selected ? parseFloat(item.shipmentPrice['$numberDecimal']) : 0)
+      return this.items.reduce((sum, item, index) => {
+        return sum + parseFloat(item.price['$numberDecimal']) * this.itemsIds[index].quantity + (this.itemsIds[index].quantity ? parseFloat(item.shipmentPrice['$numberDecimal']) : 0)
       }, 0)
     },
     shippingPrice() {
-      return this.items.reduce((sum, item) => {
-        return sum + (item.selected ? parseFloat(item.shipmentPrice['$numberDecimal']) : 0)
+      return this.items.reduce((sum, item, index) => {
+        return sum + (this.itemsIds[index].quantity ? parseFloat(item.shipmentPrice['$numberDecimal']) : 0)
       }, 0)
     }
   },
@@ -130,7 +138,7 @@ export default {
         :price="parseFloat(item.price['$numberDecimal'])"
         :shipping="parseFloat(item.shipmentPrice['$numberDecimal'])"
         :location="(item.handDeliverZone ? item.handDeliverZone : '')"
-        :image="item.image"
+        :image="item.photos[0].path"
         style="width: calc(20vw + 400px);"
       >
         <n-space size="large" align="center" style="flex-wrap: nowrap;">
