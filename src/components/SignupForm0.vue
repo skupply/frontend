@@ -30,7 +30,7 @@ async function checkUsername(username) {
     headers: { 'Content-Type': 'application/json' }
   }
 
-  const result = await fetch(`${server.userEndpoint}/find/?username=${username}`, options)
+  const result = await fetch(`${server.userEndpoint}/find/username=${username}`, options)
     .then(response => response.json())
 
   return result
