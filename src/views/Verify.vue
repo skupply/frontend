@@ -11,23 +11,21 @@ async function verifyUser() {
   const user = useUserStore()
   const server = useServerStore()
   const urlParams = new URLSearchParams(window.location.search)
-  if (!urlParams.has(user.codeparam)) return null
+  if (!urlParams.has(user.codeparam) || !urlParams.has(user.emailparam)) return null
 
+  const code = urlParams.get(user.codeparam)
+  const email = urlParams.get(user.emailparam)
   const options = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    body: JSON.stringify({ code: code })
   }
 
-  /* Backend refactoring required
-  const result = await fetch(`${server.loginEndpoint}/verify', options)
-    .then(response => {
-      if (response.status != 200) return null
-      return response.json()
-    })
-  */
-  const result = { code: 0x0300, message: 'User verified successfully' }
+  const result = await fetch(`${server.emailEndpoint}/?email=${email}`, options)
+    .then(response => response.json())
 
-  return result
+  if (result.code == 206) return true
+  return false
 }
 
 export default {
