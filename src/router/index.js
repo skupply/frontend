@@ -14,6 +14,7 @@ import Profile from '../views/Profile.vue'
 import Signup from '../views/Signup.vue'
 import Verify from '../views/Verify.vue'
 import Wishlist from '../views/Wishlist.vue'
+import Product from '../views/Product.vue'
 
 const checkAuthentication = (to, from, next) => {
     const userStore = useUserStore();
@@ -31,6 +32,8 @@ const routes = [
   { path: '/signup', component: Signup },
   { path: '/verify', component: Verify, beforeEnter: checkAuthentication },
   { path: '/wishlist', component: Wishlist, beforeEnter: checkAuthentication },
+  { path: '/product', component: Product},
+  { path: '/product/id=:id', component: Product}, 
   { path: '/:pathMatch(.*)*', component: NotFound },
 ]
 

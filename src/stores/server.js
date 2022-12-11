@@ -9,6 +9,7 @@ export const useServerStore = defineStore('server', {
       loginEndpoint: `${address}/login`,
       productsMedia: `${address}/products`,
       userEndpoint: `${address}/user`,
+      productEndpoint: `${address}/product`,
       wishlistEndpoint: `${address}/wishlist`,
     };
   }
