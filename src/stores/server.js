@@ -11,6 +11,7 @@ export const useServerStore = defineStore('server', {
       userEndpoint: `${address}/user`,
       productEndpoint: `${address}/product`,
       wishlistEndpoint: `${address}/wishlist`,
+      searchEndpoint: `${address}/search`,
     };
   }
 })

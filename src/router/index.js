@@ -10,6 +10,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import NotFound from '../views/NotFound.vue'
 import Market from '../views/Market.vue'
+import Search from '../views/Search.vue'
 import Profile from '../views/Profile.vue'
 import Signup from '../views/Signup.vue'
 import Verify from '../views/Verify.vue'
@@ -28,6 +29,7 @@ const routes = [
   { path: '/cart', component: Cart, beforeEnter: checkAuthentication },
   { path: '/login', component: Login },
   { path: '/market', component: Market },
+  { path: '/search', component: Search},
   { path: '/profile', component: Profile, beforeEnter: checkAuthentication },
   { path: '/signup', component: Signup },
   { path: '/verify', component: Verify, beforeEnter: checkAuthentication },

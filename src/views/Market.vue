@@ -1,4 +1,8 @@
 <script>
+// States imports
+import { useUserStore } from '../stores/user'
+import { useServerStore } from '../stores/server'
+
 // Packages imports
 import { ref } from 'vue'
 import { useMessage } from 'naive-ui'
@@ -13,9 +17,6 @@ import { Icon } from '@vicons/utils'
 import { SearchOutline } from '@vicons/ionicons5'
 
 let message = null
-let options = [
-  { label: 'Tutte le categorie', value: '' }
-]
 
 const searchForm = ref(null)
 const searchModel = ref({ query: '', category: '', location: '' })
@@ -42,14 +43,36 @@ const searchRules = {
   }
 }
 
+async function getCategories(){
+  const user = useUserStore()
+  const server = useServerStore()
+  
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
+  };
+
+  const result = await fetch(`${server.searchEndpoint}/categories`, requestOptions).then(response => response.json())
+
+  return result;
+}
+
 export default {
   data() {
     return {
       theme,
-      options,
+      options: [],
       decorationStyle: { backgroundColor: theme.common.primaryColor },
       hStyle: { lineHeight: '2rem', color: theme.common.foreground },
     }
+  },
+  async mounted(){
+    const result = await getCategories();
+
+    this.options.push({ label: 'Tutte le categorie', value: '' });
+    result.categories.forEach(element => {
+      this.options.push({label: element.title, value: element.title});
+    });
   },
   setup() {
     message = useMessage()
@@ -75,8 +98,8 @@ export default {
         const category = this.searchModel.category
         const location = this.searchModel.location
 
-        let url = `search/?query=${query}`
-        if (categery) url += `&category=${category}`
+        let url = `search?key=${query}`
+        if (category) url += `&category=${category}`
         if (location) url += `&location=${location}`
 
         this.$router.push(url)
