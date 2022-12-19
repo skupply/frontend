@@ -39,7 +39,7 @@ export default {
             smallLabel,
             id: this.$route.params.id,//id prodotto indicato nell'url
             item: null,//dati relativi al prodotto indicate nell'url
-            seller: null,//dati relativi al venditore del prodotto
+            sellerId: null,//dati relativi al venditore del prodotto
             tileStyle: { color: theme.common.primaryColor},
             infoStyle: { color: theme.common.primaryColor},
             priceStyle: { lineHeight: '2rem', color: theme.common.infoColor }
@@ -47,8 +47,9 @@ export default {
     },
     async mounted(){
         const response = await getProduct(this.id)
-        this.item = response.article;
-        this.seller = response.seller;
+        this.item = response.item;
+        this.sellerId = response.item.ownerId;
+        //TODO recuperare il nome del venditore dato il suo id (sellerId)
     },
     methods: {
         //inserimento articolo nel proprio carrello
@@ -168,9 +169,9 @@ export default {
                 <n-space vertical style="padding-top: 160px; padding-bottom: 20px;">
                     <!--prezzo e info spedizione-->
                     <n-h2 :style="priceStyle">€ {{parseFloat(item.price['$numberDecimal']).toFixed(2)}}</n-h2>
-                    <n-h5><Icon><MapPin/></Icon>{{item.location}}</n-h5>
-                    <n-h5><Icon><Van/></Icon>Spedizione: € {{parseFloat(item.shipmentPrice['$numberDecimal']).toFixed(2)}}</n-h5>
-                    <n-h5 v-if="item.handDeliver"><Icon><User/></Icon> Ritiro a mano disponibile</n-h5>
+                    <n-h5><Icon><MapPin/></Icon>{{item.city}}</n-h5>
+                    <n-h5><Icon><Van/></Icon>Spedizione: € {{parseFloat(item.shipmentCost['$numberDecimal']).toFixed(2)}}</n-h5>
+                    <n-h5 v-if="item.pickUpAvail"><Icon><User/></Icon> Ritiro a mano disponibile</n-h5>
                 </n-space>
 
                 <!--bottoni carrello, wishlist, compra e invia proposta-->
@@ -187,7 +188,7 @@ export default {
             <!--info venditore-->
             <n-space vertical>
                 <n-h4 style="infoStyle">Info Venditore</n-h4>
-                <n-h6>{{seller.username}}</n-h6>
+                <n-h6>{{sellerId}}</n-h6>
                 <n-h6>RECENSIONE ...</n-h6>
                 <n-space>
                     <n-button round type="primary" size="large" @click="chat"><Icon><ChatbubblesOutline/></Icon>Avvia una chat</n-button>

@@ -34,8 +34,8 @@ const routes = [
   { path: '/signup', component: Signup },
   { path: '/verify', component: Verify, beforeEnter: checkAuthentication },
   { path: '/wishlist', component: Wishlist, beforeEnter: checkAuthentication },
-  { path: '/product', component: Product},
-  { path: '/product/id=:id', component: Product}, 
+  { path: '/item', component: Product},
+  { path: '/item/id=:id', component: Product}, 
   { path: '/:pathMatch(.*)*', component: NotFound },
 ]
 

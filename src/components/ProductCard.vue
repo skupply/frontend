@@ -43,7 +43,7 @@ export default {
 
         <n-space vertical justify="space-between" style="margin: 0 0 0 25px;">
           <n-space vertical>
-            <router-link :to="`/product/id=${id}`">
+            <router-link :to="`/item/id=${id}`">
               <n-h4 class="title">{{title}}</n-h4>
             </router-link>
             <n-text :style="{ color: smallLabel }">{{location}}</n-text>
