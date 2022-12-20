@@ -67,6 +67,9 @@ export default {
     }
   },
   async mounted(){
+    //nel caso vi siano dei parametri inutili nell'url, questi vengono rimossi
+    window.history.pushState(null, null, '/market');
+
     const result = await getCategories();
 
     this.options.push({ label: 'Tutte le categorie', value: '' });
@@ -104,6 +107,11 @@ export default {
 
         this.$router.push(url)
       }).catch(() => {})
+    },
+    searchByCategory(category){
+      //inserimento parametro nella url e redirect all pagina search
+      location.replace("/search?category="+category);
+      
     }
   }
 }
@@ -148,6 +156,7 @@ export default {
           title="Elementari"
           text="Some quick example text to build on the card title and make up the bulk of the card's content."
           button="Seleziona"
+          @click="searchByCategory('elementari')"
         />
       </n-grid-item>
       <n-grid-item>
@@ -156,6 +165,7 @@ export default {
           title="Medie"
           text="Some quick example text to build on the card title and make up the bulk of the card's content."
           button="Seleziona"
+          @click="searchByCategory('medie')"
         />
       </n-grid-item>
       <n-grid-item>
@@ -164,6 +174,7 @@ export default {
           title="Superiori"
           text="Some quick example text to build on the card title and make up the bulk of the card's content."
           button="Seleziona"
+          @click="searchByCategory('superiori')"
         />
       </n-grid-item>
       <n-grid-item>
@@ -172,6 +183,7 @@ export default {
           title="Università"
           text="Some quick example text to build on the card title and make up the bulk of the card's content."
           button="Seleziona"
+          @click="searchByCategory('università')"
         />
       </n-grid-item>
     </n-grid>
