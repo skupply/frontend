@@ -7,7 +7,7 @@ import { useUserStore } from './stores/user'
 
 // Components imports
 import Footer from './components/Footer.vue'
-import Navbar from './components/Navbar.vue'
+import Navbar from './components/NavBar.vue'
 
 export default {
   data() {
