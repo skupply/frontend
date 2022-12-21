@@ -102,16 +102,16 @@ export default {
         if (response.ok == true) {
           const keys = ['firstname', 'lastname', 'username', 'email', 'token']
     
-          if (keys.every(key => response[key])) {
+          if (keys.every(key => response.user[key])) {
             const user = useUserStore()
 
-            user.data.firstname = response.firstname
-            user.data.lastname = response.lastname
-            user.data.username = response.username
-            user.data.email = response.email
+            user.data.firstname = response.user.firstname
+            user.data.lastname = response.user.lastname
+            user.data.username = response.user.username
+            user.data.email = response.user.email
 
             user.logged = this.loginModel.logged
-            user.token = response.token
+            user.token = response.user.token
 
             this.loginModel.email = ''
             this.loginModel.password = ''
