@@ -30,6 +30,34 @@ async function getProduct(id){
   return result;
 }
 
+async function getSellerInfo(id){
+    const user = useUserStore()
+    const server = useServerStore()
+
+    const options = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
+    }
+
+  const result = await fetch(`${server.productEndpoint}/seller/id=`+id, options).then(response => response.json());
+
+  return result;
+}
+
+async function getRating(username){
+    const user = useUserStore()
+    const server = useServerStore()
+
+    const options = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
+    }
+
+  const result = await fetch(`${server.sellerEndpoint}/public/`+username, options).then(response => response.json());
+
+  return result;
+}
+
 export default {
     data() {
         const smallLabel = '#00000060'
@@ -39,17 +67,28 @@ export default {
             smallLabel,
             id: this.$route.params.id,//id prodotto indicato nell'url
             item: null,//dati relativi al prodotto indicate nell'url
-            sellerId: null,//dati relativi al venditore del prodotto
+            sellerId: null,//id relativo al venditore del prodotto
+            seller: null,//username venditore
+            rating: null,//rating venditore
             tileStyle: { color: theme.common.primaryColor},
             infoStyle: { color: theme.common.primaryColor},
             priceStyle: { lineHeight: '2rem', color: theme.common.infoColor }
         }
     },
     async mounted(){
+        //richiesta info articolo da api
         const response = await getProduct(this.id)
         this.item = response.item;
+
+        //richiesta username seller da api
         this.sellerId = response.item.ownerId;
-        //TODO recuperare il nome del venditore dato il suo id (sellerId)
+        const response2 = await getSellerInfo(this.sellerId);
+        this.seller = response2.user.username;
+    
+        //richiesta rating seller da api
+        const response3 = await getRating(this.seller);
+        this.rating = response3.seller.rating;
+
     },
     methods: {
         //inserimento articolo nel proprio carrello
@@ -188,8 +227,8 @@ export default {
             <!--info venditore-->
             <n-space vertical>
                 <n-h4 style="infoStyle">Info Venditore</n-h4>
-                <n-h6>{{sellerId}}</n-h6>
-                <n-h6>RECENSIONE ...</n-h6>
+                <n-h6>{{seller}}</n-h6>
+                <n-rate readonly :default-value="rating" />
                 <n-space>
                     <n-button round type="primary" size="large" @click="chat"><Icon><ChatbubblesOutline/></Icon>Avvia una chat</n-button>
                     <n-button round type="info" size="large" @click="goToSeller">Visita il profilo</n-button>
