@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useServerStore = defineStore('server', {
   state: () => {
-    const address = process.env.SERVER || 'http://localhost:3000'
+    const address = 'https://skupply-api.herokuapp.com'// 'http://localhost:3000'
     return {
       cartEndpoint: `${address}/cart`,
       emailEndpoint: `${address}/email`,
