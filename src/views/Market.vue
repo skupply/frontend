@@ -68,7 +68,7 @@ export default {
   },
   async mounted(){
     //nel caso vi siano dei parametri inutili nell'url, questi vengono rimossi
-    window.history.pushState(null, null, '/market');
+    this.$router.push({ path: 'market'})
 
     const result = await getCategories();
 

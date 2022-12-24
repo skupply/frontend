@@ -244,6 +244,9 @@ export default{
     }
 }
 
+
+//TODO
+//inserire rating prodotto come media o altra funzione algebrica
 </script>
 
 <template>
@@ -332,9 +335,8 @@ export default{
             :price="parseFloat(item.price['$numberDecimal'])"
             :shipping="parseFloat(item.shipmentCost['$numberDecimal'])"
             :location="(item.city ? item.city : '')"
-            :image="item.photos[0]"
             style="width: calc(20vw + 400px);"
-        >
+        ><!--:image="item.photos[0]"  rimosso prop image -->
             <n-space size="large" align="center" style="felx-wrap: nowrap:">
                 <n-button round type="primary" style="width: 40px; height: 40px; padding: 0" @click="addWishlist(item._id)">
                     <Icon size="20" :color="theme.common.foreground"><Heart24Filled></Heart24Filled></Icon>

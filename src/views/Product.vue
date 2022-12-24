@@ -54,7 +54,6 @@ async function getRating(username){
     }
 
   const result = await fetch(`${server.sellerEndpoint}/public/`+username, options).then(response => response.json());
-
   return result;
 }
 
@@ -69,7 +68,7 @@ export default {
             item: null,//dati relativi al prodotto indicate nell'url
             sellerId: null,//id relativo al venditore del prodotto
             seller: null,//username venditore
-            rating: null,//rating venditore
+            rating: ref(0),//rating venditore
             tileStyle: { color: theme.common.primaryColor},
             infoStyle: { color: theme.common.primaryColor},
             priceStyle: { lineHeight: '2rem', color: theme.common.infoColor }
@@ -87,8 +86,10 @@ export default {
     
         //richiesta rating seller da api
         const response3 = await getRating(this.seller);
-        this.rating = response3.seller.rating;
-
+        if(response3.seller.rating)
+            this.rating = Math.floor(response3.seller.rating);
+        else
+            this.rating = 0;   
     },
     methods: {
         //inserimento articolo nel proprio carrello
@@ -151,7 +152,7 @@ export default {
 
         },
         async goToSeller(){
-
+            this.$router.push('/vendor?id='+this.sellerId);
         }
     },
     components: {
@@ -227,8 +228,10 @@ export default {
             <!--info venditore-->
             <n-space vertical>
                 <n-h4 style="infoStyle">Info Venditore</n-h4>
-                <n-h6>{{seller}}</n-h6>
-                <n-rate readonly :default-value="rating" />
+                <router-link :to="`/vendor?id=${sellerId}`">
+                    <n-h6>{{seller}}</n-h6>
+                </router-link>
+                <n-rate readonly :default-value="rating" :value="rating"/>
                 <n-space>
                     <n-button round type="primary" size="large" @click="chat"><Icon><ChatbubblesOutline/></Icon>Avvia una chat</n-button>
                     <n-button round type="info" size="large" @click="goToSeller">Visita il profilo</n-button>
@@ -264,6 +267,10 @@ export default {
   width: 540px;
   height: 405px;
   object-fit: cover;
+}
+
+a:link{
+ text-decoration: none;
 }
 
 </style>

@@ -13,6 +13,7 @@ export const useServerStore = defineStore('server', {
       sellerEndpoint: `${address}/seller`,
       wishlistEndpoint: `${address}/wishlist`,
       searchEndpoint: `${address}/search`,
+      reviewEndpoint: `${address}/review`,
     };
   }
 })

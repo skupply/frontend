@@ -12,6 +12,7 @@ import NotFound from '../views/NotFound.vue'
 import Market from '../views/Market.vue'
 import Search from '../views/Search.vue'
 import Profile from '../views/Profile.vue'
+import VendorPubblic from '../views/VendorPubblic.vue'
 import Signup from '../views/Signup.vue'
 import Verify from '../views/Verify.vue'
 import Wishlist from '../views/Wishlist.vue'
@@ -31,6 +32,7 @@ const routes = [
   { path: '/market', component: Market },
   { path: '/search', component: Search},
   { path: '/profile', component: Profile, beforeEnter: checkAuthentication },
+  { path: '/vendor', component: VendorPubblic },
   { path: '/signup', component: Signup },
   { path: '/verify', component: Verify, beforeEnter: checkAuthentication },
   { path: '/wishlist', component: Wishlist, beforeEnter: checkAuthentication },

@@ -22,14 +22,6 @@ async function getCartItems() {
     body: JSON.stringify({email: user.data.email})
   }
 
-  /* Backend refactoring required
-  const result = await fetch(`${server.userEndpoint}/cart/?username=${user.data.username}`, options)
-    .then(response => {
-      if (response.status != 200) return null
-      return response.json()
-    })
-  */
-
   const result = await fetch(`${server.cartEndpoint}`, options).then(response => response.json());
 
   // Add server path to images
