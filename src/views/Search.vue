@@ -5,7 +5,7 @@ import { useServerStore } from '../stores/server'
 
 // Packages imports
 import { ref } from 'vue'
-import { useMessage } from 'naive-ui'
+import { NIcon, useMessage } from 'naive-ui'
 
 // Files imports 
 import theme from '../assets/theme'
@@ -13,7 +13,7 @@ import theme from '../assets/theme'
 // Components imports
 import ProductCard from '../components/ProductCard.vue'
 import { Icon } from '@vicons/utils'
-import { Heart24Filled } from '@vicons/fluent'
+import { Heart24Filled, Info28Regular, SidebarSearchRtl20Regular } from '@vicons/fluent'
 import { SearchOutline } from '@vicons/ionicons5'
 
 let message = null
@@ -66,10 +66,10 @@ export default{
             key: ref(""),
             category: ref(""),
             location: ref(""),
-            minPrice: ref(""),
-            maxPrice: ref(""),
-            isShipment: ref(false),
-            rating: ref(null),
+            minPrice: ref("0"),
+            maxPrice: ref("0"),
+            isShipment: ref(""),
+            rating: ref(""),
             orderBy: ref(""),
             theme,
             decorationStyle: { backgroundColor: theme.common.primaryColor },
@@ -81,6 +81,8 @@ export default{
         ProductCard,
         Icon,
         Heart24Filled,
+        Info28Regular,
+        SidebarSearchRtl20Regular,
         SearchOutline
     },
     async mounted(){
@@ -123,7 +125,7 @@ export default{
                     label: "1 stella o più"
                 },
                 {
-                    value: null,
+                    value: 0,
                     label: "qualsiasi stella"
                 },
             ]
@@ -136,13 +138,23 @@ export default{
                 const query = this.searchModel.query
                 const category = this.searchModel.category
                 const location = this.searchModel.location
-
+    
                 this.key = query;
                 this.category = category;
                 this.location = location;
 
                 this.newSearch()
             }).catch(() => {})
+        },
+        info() {
+            message.create("La ricerca per recensione si basa sulla media delle recensioni del venditore e non sul singolo prodotto.", {
+                type: "success",
+                icon: () => h(NIcon, null, { default: () => h(SidebarSearchRtl20Regular) }),//visualizzazione icona personalizzata
+                closable: true,
+                duration: 5e3,//durata di 5 secondi
+                showIcon: true,
+                keepAliveOnHover: true,//con il cursore sopra, il messaggio non viene chiuso
+            });
         },
         //vengono prelevati i parametri di ricerca dall'url al caricamento della pagina
         getQueryParams(){
@@ -151,9 +163,10 @@ export default{
             this.location = this.$route.query.location;  
             this.minPrice = this.$route.query.min_price;  
             this.maxPrice = this.$route.query.max_price;  
-            this.isShipment = this.$route.query.shipment;  
+            this.isShipment = (this.$route.query.shipment == "true") ? true : false; 
             this.rating = this.$route.query.rating;  
             this.orderBy = this.$route.query.orderBy;  
+
         },
         //ricerca articoli in base ai parametri passati alla url
         async getItems(){
@@ -244,15 +257,15 @@ export default{
     }
 }
 
-
-//TODO
-//inserire rating prodotto come media o altra funzione algebrica
+//FIXME: tutti i campi vengono pre compilati se sono presenti già dei valori ma non
+// per il campo rating che rimane come non compilato (soluzione momentanea, disattivare il radio button corrispondente
+//) e la barra di ricerca
 </script>
 
 <template>
 <!--barra di ricerca-->
 <n-space class="decoration" justify="center" size="large" align="center" :style="decorationStyle">
-    <n-form inline ref="searchForm" :model="this.searchModel" :rules="searchRules">
+    <n-form inline ref="searchModel" :model="this.searchModel" :rules="searchRules">
         <n-form-item path="query">
             <n-input v-model:value="this.searchModel.query" round placeholder="Cosa cerchi?"/>
         </n-form-item>
@@ -308,14 +321,16 @@ export default{
 
         <!--valutazione-->
         <n-space vertical size="small">
-            <n-h5 :style="hStyle">Valutazione</n-h5>
+            <n-h5 :style="hStyle">Valutazione<Icon size="20" @click="info"><Info28Regular></Info28Regular></Icon></n-h5>
             <n-radio-group v-model:value="this.rating" name="rating">
                 <n-space vertical>
                     <n-radio
                     v-for="rating in ratings"
                     :key="rating.value"
-                    :value="rating.value"
+                    :value=rating.value
                     :label="rating.label"
+                    :disabled="rating.value == this.rating"
+                    :default-checked="rating.value == this.rating"
                     @change="newSearch"/>
                 </n-space>
             </n-radio-group>

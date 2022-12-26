@@ -127,7 +127,7 @@ export default {
             return result;
         },
         //acquisto diretto dell'articolo
-        //TODO funzione checkout del cart da implementare
+        //TODO: funzione checkout del cart da implementare
         async buy(){
             const user = useUserStore()
             const server = useServerStore()
