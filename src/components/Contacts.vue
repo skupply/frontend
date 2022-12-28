@@ -3,14 +3,10 @@
 import { useUserStore } from '../stores/user'
 import { useServerStore } from '../stores/server'
 
-// Files imports 
-import theme from '../assets/theme'
-
 // Components imports
 import ContactCard from './ContactCard.vue'
 
-
-async function getAllOut(){
+async function getSellerInfo(id){
     const user = useUserStore()
     const server = useServerStore()
 
@@ -18,28 +14,42 @@ async function getAllOut(){
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
     }
-   
-    const result = await fetch(`${server.chatEndpoint}?username=`+user.data.username, options).then(response => response.json());
-    return result;
+
+  const result = await fetch(`${server.productEndpoint}/seller/id=`+id, options).then(response => response.json());
+
+  return result;
 }
 
 export default {
     data() {
         return {
+            hover: false,
             username: ref(""),
-            chats: ref([]),//array contenente tutte le chat effettuate con gli altri utenti
+            chats: ref([]),
         }
+    },
+    props: {
+        messages: ref([]),//array contenente tutte le chat effettuate con gli altri utenti
     },
     async mounted() {
         const user = useUserStore()
         this.username = user.data.username;
+        this.chats = this.messages;
+      
+        //recupero username dell'utente con cui si ha una chat
+        for(let i=0; i<this.chats.length; i++){
+            const username = await getSellerInfo(this.chats[i].user1.id);
 
-        //recupero chat allOut ovvero, messaggi inviati
-        let chats = await getAllOut();
-        this.chats = chats.chats;
+            //se lo username è diverso da quello dell'utente attuale,
+            //vuol dire che ho trovato lo username dell'altro utente
+            if(username.user.username != this.username){
+                this.chats[i]["user2Username"] = username.user.username;
+            } else {
+                const username2 = await getSellerInfo(this.chats[i].user2.id);
+                this.chats[i]["username2"] = username2.user.username;
+            }
 
-        //TODO: recuperare username dall'id per il componente ContactCard
-
+        }
     },
     components: {
         ContactCard,
@@ -49,16 +59,23 @@ export default {
 </script>
 
 <template>
- <n-card title="Le tue chat" style="border-radius: 25px; width: 1110px; min-width: 500px; max-width: 500px;">
-   
+<n-card title="Le tue chat" style="border-radius: 25px; width: 1110px; min-width: 500px; max-width: 500px;">
+
     <ContactCard v-for="chat in chats"
-        :user1 = "chat.user1.id"
-        :user2 = "chat.user2.id"
+        :user = "chat.user2Username"
+        @mouseenter = "hover = true"
+        @mouseleave = "hover = false"
+        @click="$emit('openChat', chat._id)"
+        :class="{'div-hover': hover}"
     >
     </ContactCard>
- 
- </n-card>
+</n-card>
 </template>
 
 <style scoped>
+
+.div-hover {
+    background-color: #FA4F2EFF;
+}
+
 </style>

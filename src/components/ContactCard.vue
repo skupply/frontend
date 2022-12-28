@@ -16,8 +16,7 @@ export default {
     ImageOutline,
   },
   props: {
-    user1: { type: String, required: true },//lo user che ha iniziato la chat
-    user2: { type: String, required: true },//lo user che è stato mittente al primo messaggio
+    user: { type: String, required: true },//lo user con cui si ha una chat
     image: { type: String, default: null },
   }
 }
@@ -25,7 +24,7 @@ export default {
 
 <template>
   <n-card style="filter: drop-shadow(0 4px 8px #00000010); min-width: 400px; max-width: 400px;">
-    <n-space size="large" justify="space-between" align="center" style="min-height: 100px; min-width: 950px; flex-wrap: nowrap;">
+    <n-space size="large" justify="space-between" align="center" style="min-height: 100px; min-width: 370px; flex-wrap: nowrap;">
       <n-space style="flex-wrap: nowrap;">
         <img v-if="image" class="image" :src="image" :alt="title"/>
         <n-space v-else class="image" justify="center" align="center">
@@ -34,8 +33,7 @@ export default {
 
         <n-space vertical justify="space-between" style="margin: 0 0 0 25px;">
           <n-space vertical>
-            <n-h4 class="title">{{user1}}</n-h4>
-            <n-text :style="{ color: smallLabel }">{{user2}}</n-text>
+            <n-h4 class="title">{{user}}</n-h4>
           </n-space>
         </n-space>
       </n-space>
