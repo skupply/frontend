@@ -75,7 +75,7 @@ export default {
 <style scoped>
 
 .div-hover {
-    background-color: #FA4F2EFF;
+    background-color: #BDBDBD;
 }
 
 </style>

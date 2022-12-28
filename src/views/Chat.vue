@@ -81,7 +81,6 @@ export default {
         <Chat size="600"/>
         <n-h5>Apri una chat per visualizzare i messaggi</n-h5>
     </n-space>
-
 </n-space>
 </template>
 
