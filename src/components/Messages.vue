@@ -50,6 +50,7 @@ export default {
   },
   props: {
     messagesId: { type: Array, required: true },//la lista degli id dei messaggi scambiati
+    user2: {type: String, default: ""}
   },
   components: {
     Icon,
@@ -58,20 +59,24 @@ export default {
   async mounted(){
     const user = useUserStore()
     this.username = user.data.username;
+    this.seller = this.user2;
 
     //recupero messaggi veri e propri dal db
     for(let i=0; i<this.messagesId.length; i++){
+      if(this.messagesId[i] != ""){//mi assicuro che non sia un caso di incosistenza o chat senza messaggi
         let messaggio = await getMessage(this.messagesId[i].id);
-        if(messaggio.code=800) {
-            //recupero lo username dell'utente che ha inviato il messaggio
-            const username = await getUserInfo(messaggio.message.sender.id);
-            messaggio.message["username"] = username.user.username;
-            this.messages.push(messaggio.message);
 
-            if(username.user.username != this.username)
-              this.seller = username.user.username;
-        }
-    };
+        if(messaggio.code=800) {
+          //messaggio trovato
+          //recupero lo username dell'utente che ha inviato il messaggio
+          const username = await getUserInfo(messaggio.message.sender.id);
+          messaggio.message["username"] = username.user.username;
+          this.messages.push(messaggio.message);
+
+         
+        } 
+      }
+    }
     
     this.ready = true;
   },
@@ -101,6 +106,8 @@ export default {
     
       //pulizia text area
       this.msg = "";
+
+      return result;
     }
   }
 }
@@ -109,7 +116,6 @@ export default {
 auto scroll quando si invia un nuovo messaggio
 sistemare layout dei messaggi (quelli ricevuti andrebbero a dx)
 ritocchi vari su grafica e layout
-poter scrivere un messaggio dalla pagina di un prodotto -> dovrebbe comparire il nuovo contatto nell'elenco
 */
 </script>
 
@@ -135,6 +141,8 @@ poter scrivere un messaggio dalla pagina di un prodotto -> dovrebbe comparire il
                   {{message.text}}
               </n-text><!--i messaggi inviati da "noi" sono quelli in grigio mentre quelli ricevuti viola-->
           </n-card>
+
+          <n-h5 v-if="messages.length == 0">Inizia a scrivere!</n-h5>
         </n-space>
       </n-scrollbar>
     </n-space>

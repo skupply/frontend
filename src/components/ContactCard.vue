@@ -8,6 +8,7 @@ export default {
     const smallLabel = '#00000060'
 
     return {
+      hover: false,
       smallLabel
     }
   },
@@ -16,14 +17,20 @@ export default {
     ImageOutline,
   },
   props: {
-    user: { type: String, required: true },//lo user con cui si ha una chat
+    id: {type: String, required: true},//l'id che identifica la chat
+    user: { type: String, default: "" },//lo user con cui si ha una chat
     image: { type: String, default: null },
   }
 }
 </script>
 
 <template>
-  <n-card style="filter: drop-shadow(0 4px 8px #00000010); min-width: 400px; max-width: 400px;">
+  <n-card style="filter: drop-shadow(0 4px 8px #00000010); min-width: 400px; max-width: 400px;"
+    @mouseenter = "hover = true"
+    @mouseleave = "hover = false"
+    @click="$emit('openChat', this.id, this.user)"
+    :class="{'div-hover': hover}"
+  >
     <n-space size="large" justify="space-between" align="center" style="min-height: 100px; min-width: 370px; flex-wrap: nowrap;">
       <n-space style="flex-wrap: nowrap;">
         <img v-if="image" class="image" :src="image" :alt="title"/>
@@ -33,7 +40,7 @@ export default {
 
         <n-space vertical justify="space-between" style="margin: 0 0 0 25px;">
           <n-space vertical>
-            <n-h4 class="title">{{user}}</n-h4>
+            <n-h5 class="title">{{user}}</n-h5>
           </n-space>
         </n-space>
       </n-space>
@@ -53,11 +60,15 @@ export default {
 
 .title {
   max-width: 15vw;
+  font-size: 27px;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.7rem;
   white-space: nowrap;
 }
 
+.div-hover {
+    background-color: #BDBDBD;
+}
 
 </style>

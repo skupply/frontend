@@ -11,7 +11,7 @@ import Chat from '../components/images/Chat.vue'
 async function getAllOut(){
     const user = useUserStore()
     const server = useServerStore()
-
+    
     const options = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
@@ -25,6 +25,7 @@ export default {
     data() {
         return {
             openMessages: false,
+            user2: ref(""), 
             ready: false,
             chats: ref([]),//array contenente tutte le chat effettuate con gli altri utenti
             messages: ref([]),//i messaggi che sono da visualizzare
@@ -34,6 +35,7 @@ export default {
         //recupero chat allOut ovvero, messaggi inviati
         let chats = await getAllOut();
         this.chats = chats.chats;
+
         this.ready = true;//per fare in modo che i componenti figli aspettino il fetch 
                             //dei dati 
     },
@@ -45,15 +47,15 @@ export default {
     methods: {
         //funzione che gestisce l'apertura della chat in seguito al 
         //click nel componente figlio Contacts
-        callbackOpenChat(id){
-            //nel caso la chat è già aperta questa viene chiusa nel caso
-            //in cui viene effetttuato un click
+        callbackOpenChat(id, user){
+            //nel caso una chat sia già aperta, viene ignorato il comando
+            //solo se la chat è chiusa se ne può aprire un'altra
             if(this.openMessages) {
-                this.openMessages = false;
                 return;
             }
 
             //recupero chat corrispondente
+            this.user2 = user;
             const chat = this.chats.filter(chat => chat._id == id);
             this.messages = chat[0].messages;//il primo elemento in quanto dal filtro passerà UN SOLO ELEMENTO
             this.openMessages = true;
@@ -75,6 +77,7 @@ export default {
     />
     <Messages v-if="ready && openMessages"
         :messagesId="this.messages"
+        :user2="this.user2"
         @closeChat="callbackCloseChat"
     />
     <n-space vertical align="center" v-else>

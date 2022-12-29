@@ -6,7 +6,7 @@ import { useServerStore } from '../stores/server'
 // Components imports
 import ContactCard from './ContactCard.vue'
 
-async function getSellerInfo(id){
+async function getUserInfo(id){
     const user = useUserStore()
     const server = useServerStore()
 
@@ -15,7 +15,7 @@ async function getSellerInfo(id){
         headers: { 'Content-Type': 'application/json', 'x-access-token': user.token }
     }
 
-  const result = await fetch(`${server.productEndpoint}/seller/id=`+id, options).then(response => response.json());
+  const result = await fetch(`${server.buyerEndpoint}//id=`+id, options).then(response => response.json());
 
   return result;
 }
@@ -23,7 +23,6 @@ async function getSellerInfo(id){
 export default {
     data() {
         return {
-            hover: false,
             username: ref(""),
             chats: ref([]),
         }
@@ -38,21 +37,26 @@ export default {
       
         //recupero username dell'utente con cui si ha una chat
         for(let i=0; i<this.chats.length; i++){
-            const username = await getSellerInfo(this.chats[i].user1.id);
-
+            const username = await getUserInfo(this.chats[i].user1.id);
+           
             //se lo username è diverso da quello dell'utente attuale,
             //vuol dire che ho trovato lo username dell'altro utente
             if(username.user.username != this.username){
                 this.chats[i]["user2Username"] = username.user.username;
             } else {
-                const username2 = await getSellerInfo(this.chats[i].user2.id);
-                this.chats[i]["username2"] = username2.user.username;
+                const username2 = await getUserInfo(this.chats[i].user2.id);
+                this.chats[i]["user2Username"] = username2.user.username;
             }
-
         }
+
     },
     components: {
         ContactCard,
+    },
+    methods: {
+        callback(id, user){
+            this.$emit('openChat', id, user);
+        }
     }
 }
 
@@ -63,19 +67,13 @@ export default {
 
     <ContactCard v-for="chat in chats"
         :user = "chat.user2Username"
-        @mouseenter = "hover = true"
-        @mouseleave = "hover = false"
-        @click="$emit('openChat', chat._id)"
-        :class="{'div-hover': hover}"
+        :id = "chat._id"
+        @openChat="callback"
     >
     </ContactCard>
 </n-card>
 </template>
 
 <style scoped>
-
-.div-hover {
-    background-color: #BDBDBD;
-}
 
 </style>

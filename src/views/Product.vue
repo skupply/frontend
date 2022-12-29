@@ -142,14 +142,30 @@ export default {
             }
 
             const result = await fetch(`${server.cartEndpoint}/checkout`, options).then(response => response.json());
-            console.log(result)
             return result;
         },
         async sendProposal(){
             
         },
         async chat(){
+            //creo una chat tramit api e successivamente reindirizzamento alla pagina dei messaggi
+            const user = useUserStore()
+            const server = useServerStore()
 
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-access-token': user.token },
+                body: JSON.stringify({
+                    contact: this.seller
+                })
+            }
+
+            const result = await fetch(`${server.chatEndpoint}?username=`+user.data.username, options).then(response => response.json());
+     
+            if(result.code == 800){
+                //chat creata con successo, reindirizzamento
+                this.$router.push('/chat');
+            }
         },
         async goToSeller(){
             this.$router.push('/vendor?id='+this.sellerId);
