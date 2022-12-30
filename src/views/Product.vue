@@ -69,6 +69,7 @@ export default {
             sellerId: null,//id relativo al venditore del prodotto
             seller: null,//username venditore
             rating: ref(0),//rating venditore
+            inStock: ref(true),//se il prodotto è disponibile o meno
             tileStyle: { color: theme.common.primaryColor},
             infoStyle: { color: theme.common.primaryColor},
             priceStyle: { lineHeight: '2rem', color: theme.common.infoColor }
@@ -78,6 +79,7 @@ export default {
         //richiesta info articolo da api
         const response = await getProduct(this.id)
         this.item = response.item;
+        (this.item.quantity > 0) ? this.inStock = true : this.inStock = false;
 
         //richiesta username seller da api
         this.sellerId = response.item.ownerId;
@@ -228,16 +230,17 @@ export default {
                     <n-h5><Icon><MapPin/></Icon>{{item.city}}</n-h5>
                     <n-h5><Icon><Van/></Icon>Spedizione: € {{parseFloat(item.shipmentCost['$numberDecimal']).toFixed(2)}}</n-h5>
                     <n-h5 v-if="item.pickUpAvail"><Icon><User/></Icon> Ritiro a mano disponibile</n-h5>
+                    <n-h6 v-if="!this.inStock" :style="priceStyle">Il prodotto non è disponibile</n-h6>
                 </n-space>
 
                 <!--bottoni carrello, wishlist, compra e invia proposta-->
                 <n-space vertical style="row-gap: 10px;">
                     <n-space style="column-gap: 20px;">
-                        <n-button round type="primary" size="large" @click="addCart">Aggiungi al carrello</n-button>
+                        <n-button round type="primary" size="large" @click="addCart" :disabled="!this.inStock">Aggiungi al carrello</n-button>
                         <n-button round type="primary" size="large" @click="addWishlist"><Icon size="20" :color="theme.common.foreground"><Heart24Filled/></Icon></n-button>
                     </n-space>
-                    <n-button round type="info" size="large" @click="buy">Compra subito</n-button>
-                    <n-button round ghost type="primary" size="large" @click="sendProposal">Invia una proposta</n-button>
+                    <n-button round type="info" size="large" @click="buy" :disabled="!this.inStock">Compra subito</n-button>
+                    <n-button round ghost type="primary" size="large" @click="sendProposal" :disabled="!this.inStock">Invia una proposta</n-button>
                 </n-space>
             </n-space>
 
