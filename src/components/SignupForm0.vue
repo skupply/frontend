@@ -30,7 +30,7 @@ async function checkUsername(username) {
     headers: { 'Content-Type': 'application/json' }
   }
 
-  const result = await fetch(`${server.userEndpoint}/find/username=${username}`, options)
+  const result = await fetch(`${server.buyerEndpoint}/find/?username=${username}`, options)
     .then(response => response.json())
 
   return result
@@ -117,6 +117,7 @@ export default {
         const emailResponse = await checkEmail(email)
         const usernameResponse = await checkUsername(username)
 
+        console.log(emailResponse, usernameResponse)
         let emailResult = false
         let usernameResult = false
         switch (emailResponse.code) {

@@ -48,14 +48,8 @@ async function createUser(data) {
     body: JSON.stringify(data)
   }
 
-  /* Backend refactoring required
-  const result = await fetch(server.userEndpoint, options)
-    .then(response => {
-      if (response.status != 200) return null
-      return response.json()
-    })
-  */
-  const result = { code: 0x0100, message: 'User created successfully' }
+  const result = await fetch(server.buyerEndpoint, options)
+    .then(response => response.json() )
   
   return result
 }
@@ -175,7 +169,7 @@ export default {
 
         const response = await createUser({...this.data, sell, address, phone, terms})
 
-        if (response) {
+        if (response.code == 100) {
           verifing.type = 'success'
           verifing.content = 'Registrato con successo'
 
