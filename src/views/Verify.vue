@@ -24,7 +24,8 @@ async function verifyUser() {
   const result = await fetch(`${server.emailEndpoint}/?email=${email}`, options)
     .then(response => response.json())
 
-  if (result.code == 206) return true
+  console.log(result)
+  if (result.code == 200) return true
   return false
 }
 

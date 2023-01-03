@@ -17,6 +17,7 @@ export const useServerStore = defineStore('server', {
       searchEndpoint: `${address}/search`,
       reviewEndpoint: `${address}/review`,
       chatEndpoint: `${address}/chat`,
+      productImagesEndpoint: `${address}/products/images`,
     };
   }
 })

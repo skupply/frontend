@@ -182,14 +182,6 @@ export default{
             url = this.getUrl();
             this.$router.push(url);
             const result = await fetch(`${server.searchEndpoint}`+url, requestOptions).then(response => response.json())
-
-            // Add server path to images
-            result.articles.forEach(item => {
-                item.photos.forEach(photo => {
-                photo = server.productsMedia + '/images/' + photo;
-                })
-            })
-
             return result;
         },
         //effettuazione di una nuova ricerca in seguito alla selezione di un input
@@ -350,6 +342,7 @@ export default{
             :price="parseFloat(item.price['$numberDecimal'])"
             :shipping="parseFloat(item.shipmentCost['$numberDecimal'])"
             :location="(item.city ? item.city : '')"
+            :image="item.photos[0]"
             style="width: calc(20vw + 400px);"
         ><!--:image="item.photos[0]"  rimosso prop image -->
             <n-space size="large" align="center" style="felx-wrap: nowrap:">

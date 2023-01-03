@@ -60,10 +60,12 @@ async function getRating(username){
 export default {
     data() {
         const smallLabel = '#00000060'
+        const server = useServerStore()
 
         return {
             theme,
             smallLabel,
+            server: useServerStore(),
             id: this.$route.params.id,//id prodotto indicato nell'url
             item: null,//dati relativi al prodotto indicate nell'url
             sellerId: null,//id relativo al venditore del prodotto
@@ -207,8 +209,7 @@ export default {
                 <n-carousel dot-placement="bottom" dot-type="line" style="max-width: 540px; max-height: 405px">
                     <!--alcune immagini di prova ad eccezione del v-for-->
                     <!--non vengon visualizzate le immagini come nel carrello per un problema al path-->
-                    <img class="carousel-img" src="https://www.marcotorella.com/wp-content/uploads/2021/10/Copia-di-come-organizzare-gli-appunti-576x1024.png">
-                    <img v-for="image in item.photos" class="carousel-img" :src="image.path" style="background-color: #D9D9D9;">
+                    <img v-for="image in item.photos" class="carousel-img" :src="`${server.productImagesEndpoint}/${image}`" style="background-color: #D9D9D9;">
                 </n-carousel>
             </n-space>
         
@@ -283,9 +284,11 @@ export default {
   box-sizing: border-box;
 }
 .carousel-img {
-  width: 540px;
-  height: 405px;
-  object-fit: cover;
+  max-width: 750px;
+  height: 400px;
+  object-fit: contain;
+  border: 1px solid #323232;
+  border-radius: 7.5px;
 }
 
 a:link{

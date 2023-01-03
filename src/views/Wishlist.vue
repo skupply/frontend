@@ -130,7 +130,7 @@ export default {
       :price="parseFloat(item.price['$numberDecimal'])"
       :shipping="item.shipping"
       :location="(item.handDeliverZone ? item.handDeliverZone : '')"
-      :image="item.image"
+      :image="item.photos[0]"
       style="width: calc(15vw + 500px);"
     >
       <n-space size="large" align="center" style="flex-wrap: nowrap;">

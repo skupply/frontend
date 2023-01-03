@@ -100,16 +100,12 @@ export default {
         const response = await requestLogin({ email: this.loginModel.email, password: this.loginModel.password })
 
         if (response.ok == true) {
-          const keys = ['firstname', 'lastname', 'username', 'email', 'token']
+          const keys = ['id', 'firstname', 'lastname', 'username', 'email', 'addresses', 'phone', 'cart', 'wishlist', 'proposals', 'isVerified', 'isSeller', 'sellerId', 'token']
     
-          if (keys.every(key => response.user[key])) {
+          if (keys.every(key => response.user[key] !== undefined)) {
             const user = useUserStore()
 
-            user.data.firstname = response.user.firstname
-            user.data.lastname = response.user.lastname
-            user.data.username = response.user.username
-            user.data.email = response.user.email
-
+            user.data = response.user
             user.logged = this.loginModel.logged
             user.token = response.user.token
 

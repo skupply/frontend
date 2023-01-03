@@ -7,11 +7,16 @@ import { Icon } from '@vicons/utils'
 import { ImageOutline } from '@vicons/ionicons5'
 import { Van } from '@vicons/carbon'
 
+// States imports
+import { useServerStore } from '../stores/server'
+
 export default {
   data() {
+    const server = useServerStore();
     const smallLabel = '#00000060'
 
     return {
+      server,
       smallLabel,
       priceStyle: { lineHeight: '2rem', color: theme.common.infoColor },
     }
@@ -36,7 +41,7 @@ export default {
   <n-card style="filter: drop-shadow(0 4px 8px #00000010);">
     <n-space size="large" justify="space-between" align="center" style="height: 100px; flex-wrap: nowrap;">
       <n-space style="flex-wrap: nowrap;">
-        <img v-if="image" class="image" :src="image" :alt="title"/>
+        <img v-if="image" class="image" :src="`${server.productImagesEndpoint}/${image}`" :alt="title"/>
         <n-space v-else class="image" justify="center" align="center">
           <Icon size="25" color="#00000040" style="display: flex; align-items: center;"><ImageOutline/></Icon>
         </n-space>

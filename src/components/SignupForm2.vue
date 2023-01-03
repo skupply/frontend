@@ -159,15 +159,16 @@ export default {
     continueSignup() {
       signupForm.value?.validate(async error => {
         if (error) { message.error('Campi non validi'); return true }
-        const sell = this.signupModel.sell
-        const address = sell ? this.signupModel.address : null
-        const phone = sell ? (this.signupModel.prefix + ' ' + this.signupModel.phone) : null
+        const isSeller = this.signupModel.sell
+        const address = isSeller ? this.signupModel.address : null
+        const prefix = isSeller ? this.signupModel.prefix : null
+        const number = isSeller ? this.signupModel.phone : null
         const terms = this.signupModel.terms
 
         this.disabled = true
         let verifing = message.create('Verifica in corso', { type: 'loading', duration: 0 })
 
-        const response = await createUser({...this.data, sell, address, phone, terms})
+        const response = await createUser({...this.data, isSeller, address, prefix, number, terms})
 
         if (response.code == 100) {
           verifing.type = 'success'
